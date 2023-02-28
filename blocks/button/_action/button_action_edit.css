@@ -1,0 +1,8 @@
+.button_action_edit {
+  background: url('../../../images/edit-button.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 24px;
+  height: 24px;
+  align-self: center;
+}

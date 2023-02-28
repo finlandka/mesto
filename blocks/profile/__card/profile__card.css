@@ -1,0 +1,11 @@
+.profile__card {
+  display: flex;
+  gap: 0 30px;
+}
+
+@media screen and (max-width:560px) {
+  .profile__card {
+    flex-direction: column;
+    gap: 22.25px 0;
+  }
+}

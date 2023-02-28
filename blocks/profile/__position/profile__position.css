@@ -1,0 +1,13 @@
+.profile__position {
+  margin: 0;
+  padding: 16px 0 0;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21.78px;
+}
+
+@media screen and (max-width: 560px) {
+  .profile__position {
+    padding: 14px 0 0;
+  }
+}
