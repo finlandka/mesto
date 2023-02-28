@@ -5,3 +5,15 @@
   width: 150px;
   height: 50px;
 }
+
+@media screen and (max-width: 730px) {
+  .button_action_add {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .button_action_add {
+    width: 282px;
+  }
+}

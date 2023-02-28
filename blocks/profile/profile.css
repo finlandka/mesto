@@ -4,11 +4,12 @@
   padding-top: 40px;
 }
 
-@media screen and (max-width:560px) {
+@media screen and (max-width:730px) {
   .profile {
     flex-direction: column;
     padding-top: 38.25px;
     justify-content: flex-start;
+    align-items: center;
     gap: 36px 0;
   }
 }
