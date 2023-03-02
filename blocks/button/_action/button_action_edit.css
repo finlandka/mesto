@@ -4,5 +4,13 @@
   background-position: center;
   width: 24px;
   height: 24px;
-  align-self: center;
+  margin-top: 15px;
+}
+
+@media screen and (max-width: 570px) {
+  .button_action_edit {
+    width: 18px;
+    height: 18px;
+    margin-top: 8px;
+  }
 }

@@ -1,0 +1,14 @@
+.heart {
+  cursor: pointer;
+  transition: opacity .3s ease-in-out;
+  background-image: url('../../../images/heart.svg');
+  background-repeat: no-repeat;
+  width: 22px;
+  height: 19px;
+}
+
+.heart:hover {
+  opacity: .5;
+}
+
+

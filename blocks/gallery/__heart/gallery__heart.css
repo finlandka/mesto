@@ -1,8 +1,0 @@
-.gallery__heart {
-  cursor: pointer;
-  transition: opacity .3s ease-in-out;
-}
-
-.gallery__heart:hover {
-  opacity: .5;
-}

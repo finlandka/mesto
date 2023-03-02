@@ -11,11 +11,12 @@
       <header class="header">
         <div class="header__logo"></div>
       </header>
+      <main>
       <section class="profile">
         <div class="profile__card">
         <img class="profile__avatar" src="images/avatar.png" alt="Аватар">
         <div class="profile__info">
-          <div class="profile__name">
+          <div>
             <h1 class="profile__fullname">Жак-Ив Кусто</h1>
             <button class="button button_action_edit"></button>
           </div>
@@ -25,51 +26,52 @@
         <button class="button button_action_add"></button>
       </section>
       <section class="gallery-section">
-        <div class="gallery">
-          <div class="gallery__item">
-            <img class="gallery__pic" src="images/gallery-karachaevsk.jpg" alt="Карачаевск">
+        <ul class="gallery">
+          <li class="gallery__item">
+            <img class="gallery__pic" src="images/gallery-baikal.jpg" alt="Байкал">
             <div class="gallery__desc">
-              <h2 class="gallery__title">Карачаевск</h2>
-              <img class="gallery__heart" src="images/heart.svg" alt="like">
+              <h2 class="gallery__title">Байкал</h2>
+              <div class="heart"></div>
             </div>
-          </div>
-          <div class="gallery__item">
-            <img class="gallery__pic" src="images/gallery-elbrus.png" alt="Гора Эльбрус">
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__pic" src="images/gallery-kamchatka.jpg" alt="Камчатка">
             <div class="gallery__desc">
-              <h2 class="gallery__title">Гора Эльбрус</h2>
-              <img class="gallery__heart" src="images/heart.svg" alt="like">
+              <h2 class="gallery__title">Камчатка</h2>
+              <div class="heart"></div>
             </div>
-          </div>
-          <div class="gallery__item">
-            <img class="gallery__pic" src="images/gallery-dombai.png" alt="Домбай">
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__pic" src="images/gallery-kiji.jpg" alt="Кижи">
             <div class="gallery__desc">
-              <h2 class="gallery__title">Домбай</h2>
-              <img class="gallery__heart" src="images/heart.svg" alt="like">
+              <h2 class="gallery__title">Кижи</h2>
+              <div class="heart"></div>
             </div>
-          </div>
-          <div class="gallery__item">
-            <img class="gallery__pic" src="images/gallery-elbrus.png" alt="Гора Эльбрус">
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__pic" src="images/gallery-lake-onejskoe.jpg" alt="Онежское озеро">
             <div class="gallery__desc">
-              <h2 class="gallery__title">Гора Эльбрус</h2>
-              <img class="gallery__heart" src="images/heart.svg" alt="like">
+              <h2 class="gallery__title">Онежское озеро</h2>
+              <div class="heart"></div>
             </div>
-          </div>
-          <div class="gallery__item">
-            <img class="gallery__pic" src="images/gallery-dombai.png" alt="Домбай">
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__pic" src="images/gallery-pov-rybaci.jpg" alt="Рыбачий полуостров">
             <div class="gallery__desc">
-              <h2 class="gallery__title">Домбай</h2>
-              <img class="gallery__heart" src="images/heart.svg" alt="like">
+              <h2 class="gallery__title">Рыбачий полуостров</h2>
+              <div class="heart"></div>
             </div>
-          </div>
-          <div class="gallery__item">
-            <img class="gallery__pic" src="images/gallery-karachaevsk.jpg" alt="Карачаевск">
+          </li>
+          <li class="gallery__item">
+            <img class="gallery__pic" src="images/gallery-sochi.jpg" alt="Сочи">
             <div class="gallery__desc">
-              <h2 class="gallery__title">Карачаево-Черкессия</h2>
-              <img class="gallery__heart" src="images/heart.svg" alt="like">
+              <h2 class="gallery__title">Сочи</h2>
+              <div class="heart"></div>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </section>
+      </main>
       <footer class="footer">
         <p class="footer__copyright">© 2020 Mesto Russia</p>
       </footer>
@@ -77,7 +79,7 @@
   <div class="popup">
     <div class="popup__container">
       <button class="button button_action_close"></button>
-      <h2 class="popup__title">Редактировать профиль</h2>
+      <legend class="popup__title">Редактировать профиль</legend>
       <form class="form">
         <input class="form__input" id="name" type="text">
         <input class="form__input" id="position" type="text">

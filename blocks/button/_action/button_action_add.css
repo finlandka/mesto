@@ -8,6 +8,12 @@
 
 @media screen and (max-width: 730px) {
   .button_action_add {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  .button_action_add {
     width: 90%;
   }
 }

@@ -1,5 +1,0 @@
-.profile__name {
-  display: grid;
-  grid-template-columns: minmax(min-content, max-content) minmax(min-content, max-content);
-  column-gap: 18px;
-}
