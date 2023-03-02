@@ -1,10 +1,10 @@
 .heart {
-  cursor: pointer;
-  transition: opacity .3s ease-in-out;
   background-image: url('../../images/heart.svg');
+  background-color: #fff;
   background-repeat: no-repeat;
   width: 22px;
   height: 19px;
+  border: none;
 }
 
 .heart:hover {
