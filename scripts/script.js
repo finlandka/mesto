@@ -61,7 +61,13 @@ function loadGallery() {
     `;
     galleryUl.prepend(galleryItem);
   })
+  const heartButton = page.querySelectorAll('.heart');
+  console.log(heartButton);
+  for (let item of heartButton) {
+    item.addEventListener('click', () => item.classList.toggle('heart_status_active'));
+  }
 }
+
 
 function openPopup(popupElement, head, button) {
   popup.classList.toggle('popup_opened');
