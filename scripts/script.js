@@ -1,12 +1,21 @@
 const page = document.querySelector('.page');
+
+const gallerySection = page.querySelector('.gallery-section');
+
+const addButton = page.querySelector('.button_action_add');
 const editButton = page.querySelector('.button_action_edit');
 const closeButton = page.querySelector('.button_action_close');
-const form = page.querySelector('.form');
+
 const popup = page.querySelector('.popup');
+const popupContainer = page.querySelector('.popup__container');
+
 const fullname = page.querySelector('.profile__fullname');
 const position = page.querySelector('.profile__position');
 const formName = page.querySelector('#name');
 const formPosition = page.querySelector('#position');
+
+const add = 'add';
+const edit = 'edit';
 
 const initialCards = [
   {
@@ -36,7 +45,6 @@ const initialCards = [
 ];
 
 function loadGallery() {
-  const gallerySection = page.querySelector('.gallery-section');
   const galleryUl = document.createElement('ul');
   galleryUl.classList.add('gallery');
   gallerySection.append(galleryUl);
@@ -51,30 +59,64 @@ function loadGallery() {
                               <button class="button heart"></button>
                             </div>
     `;
-    galleryUl.append(galleryItem);
+    galleryUl.prepend(galleryItem);
   })
+}
+
+function openPopup(popupElement, head, button) {
+  popup.classList.toggle('popup_opened');
+  const template = page.querySelector('#templateForm').content;
+  const templateForm = template.cloneNode(true);
+  templateForm.querySelector('.popup__title').textContent = head;
+  templateForm.querySelector('.form__button').textContent = button;
+  popupContainer.append(templateForm);
+  const form = page.querySelector('.form');
+  const formInput = page.querySelectorAll('.form__input');
+
+  if (popupElement === 'edit') {
+    formInput[0].value = fullname.textContent;
+    formInput[0].setAttribute('id', 'name');
+    formInput[1].value = position.textContent;
+    formInput[1].setAttribute('id', 'position');
+
+    form.addEventListener('submit', handleFormSubmit);
+  }
+
+  if (popupElement === 'add') {
+    formInput[0].placeholder = 'Название';
+    formInput[0].setAttribute('id', 'namePlace');
+    formInput[1].placeholder = 'Ссылка на картинку';
+    formInput[1].setAttribute('id', 'linkImage');
+
+    form.addEventListener('submit', uploadPicture);
+  }
+
+  function handleFormSubmit (evt) {
+    evt.preventDefault();
+    fullname.textContent = formInput[0].value;
+    position.textContent = formInput[1].value;
+    close();
+  }
+
+  function uploadPicture (evt) {
+    evt.preventDefault();
+    initialCards.push({name: formInput[0].value, link: formInput[1].value});
+    page.querySelector('.gallery').remove();
+    loadGallery();
+    close();
+  }
+}
+
+function close() {
+  popup.classList.remove('popup_opened');
+  page.querySelector('.popup__title').remove();
+  page.querySelector('.form').remove();
 }
 
 loadGallery();
 
-function openEditProfile() {
-  popup.classList.add('popup_opened');
-  formName.value = fullname.textContent;
-  formPosition.value = position.textContent;
-}
+addButton.addEventListener('click', () => openPopup(add, 'Новое место', 'Создать'));
+editButton.addEventListener('click', () => openPopup(edit, 'Редактировать профиль', 'Сохранить'));
+closeButton.addEventListener('click', close);
 
-function closeEditProfile() {
-  popup.classList.remove('popup_opened');
-}
 
-function handleFormSubmit (evt) {
-  evt.preventDefault();
-  fullname.textContent = formName.value;
-  position.textContent = formPosition.value;
-  closeEditProfile();
-}
-
-editButton.addEventListener('click', openEditProfile);
-closeButton.addEventListener('click', closeEditProfile);
-
-form.addEventListener('submit', handleFormSubmit);
