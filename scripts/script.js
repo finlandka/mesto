@@ -3,8 +3,8 @@ const page = document.querySelector('.page');
 
 const gallerySection = page.querySelector('.gallery-section');
 
-const addButton = page.querySelector('.button_action_add');
-const editButton = page.querySelector('.button_action_edit');
+const buttonAdd = page.querySelector('.button_action_add');
+const buttonEdit = page.querySelector('.button_action_edit');
 
 const popup = page.querySelector('.popup');
 const popupContainer = page.querySelector('.popup__container');
@@ -14,9 +14,6 @@ const fullname = page.querySelector('.profile__fullname');
 const position = page.querySelector('.profile__position');
 const formName = page.querySelector('#name');
 const formPosition = page.querySelector('#position');
-
-const add = 'add';
-const edit = 'edit';
 
 //массив с картинками
 let initialCards = [
@@ -67,16 +64,16 @@ function loadGallery() {
   })
 
   //добавление и удаление лайков
-  const heartButton = page.querySelectorAll('.heart');
-  for (let item of heartButton) {
+  const buttonsHeart = page.querySelectorAll('.heart');
+  for (let item of buttonsHeart) {
     item.addEventListener('click', () => item.classList.toggle('heart_status_active'));
   }
 
   //удаление картинки со страницы и из массива
-  const deleteButton = page.querySelectorAll('.gallery__delete');
-  for (let item of deleteButton) {
+  const buttonsDelete = page.querySelectorAll('.gallery__delete');
+  for (let item of buttonsDelete) {
     item.addEventListener('click', () => {
-      item.parentNode.remove();
+      //item.parentNode.remove();
       initialCards = initialCards.filter((card) => {return card.name !== item.nextElementSibling.alt});
       page.querySelector('.gallery').remove();
       loadGallery();
@@ -84,9 +81,9 @@ function loadGallery() {
   }
 
   //работа лайтбокса
-  const galleryPic = page.querySelectorAll('.gallery__pic');
+  const galleryPics = page.querySelectorAll('.gallery__pic');
   const lightboxTitle = page.querySelector('.lightbox__title');
-  for (let item of galleryPic) {
+  for (let item of galleryPics) {
     item.addEventListener('click', () => {
       lightbox.classList.toggle('lightbox_opened');
       const lightboxImage = page.querySelector('.lightbox__image');
@@ -97,8 +94,8 @@ function loadGallery() {
   }
 
   //закрытие лайтбокса
-  const closeButtonLigtbox = lightbox.querySelector('.button_action_close');
-  closeButtonLigtbox.addEventListener('click', closeLightbox);
+  const buttonCloseLigtbox = lightbox.querySelector('.button_action_close');
+  buttonCloseLigtbox.addEventListener('click', closeLightbox);
 
 }
 
@@ -109,6 +106,8 @@ function closeLightbox() {
 
 //функция открытия попапа и вставки содержимого в зависимости от кнопки
 function openPopup(popupElement, head, button) {
+  page.querySelector('.popup__title')?.remove();
+  page.querySelector('.form')?.remove();
   popup.classList.toggle('popup_opened');
   const template = page.querySelector('#templateForm').content;
   const templateForm = template.cloneNode(true);
@@ -154,23 +153,21 @@ function openPopup(popupElement, head, button) {
   }
 
   //закрытие попапа
-  const closeButtonPopup = popup.querySelector('.button_action_close');
-  closeButtonPopup.addEventListener('click', closePopup);
+  const buttonClosePopup = popup.querySelector('.button_action_close');
+  buttonClosePopup.addEventListener('click', closePopup);
 
 }
 
 //функция закрытия попапа
 function closePopup() {
   popup.classList.remove('popup_opened');
-  page.querySelector('.popup__title').remove();
-  page.querySelector('.form').remove();
 }
 
 //загрузка картинок на страницу
 loadGallery();
 
 //кнопки добавления и редактирования
-addButton.addEventListener('click', () => openPopup(add, 'Новое место', 'Создать'));
-editButton.addEventListener('click', () => openPopup(edit, 'Редактировать профиль', 'Сохранить'));
+buttonAdd.addEventListener('click', () => openPopup('add', 'Новое место', 'Создать'));
+buttonEdit.addEventListener('click', () => openPopup('edit', 'Редактировать профиль', 'Сохранить'));
 
 

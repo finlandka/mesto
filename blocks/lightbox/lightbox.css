@@ -7,10 +7,11 @@
   overflow: auto;
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s, opacity .3s ease-in-out;
+  transition: visibility .3s, opacity .3s ease-in-out;
   align-items: center;
   align-content: center;
   justify-content: center;
+  display: flex;
 }
 
 .lightbox::before {
