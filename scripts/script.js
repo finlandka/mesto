@@ -4,10 +4,10 @@ const gallerySection = page.querySelector('.gallery-section');
 
 const addButton = page.querySelector('.button_action_add');
 const editButton = page.querySelector('.button_action_edit');
-const closeButton = page.querySelector('.button_action_close');
 
 const popup = page.querySelector('.popup');
 const popupContainer = page.querySelector('.popup__container');
+const lightbox = page.querySelector('.lightbox');
 
 const fullname = page.querySelector('.profile__fullname');
 const position = page.querySelector('.profile__position');
@@ -20,27 +20,27 @@ const edit = 'edit';
 const initialCards = [
   {
     name: 'Байкал',
-    link: 'https://finlandka.github.io/mesto/images/gallery-baikal.jpg'
+    link: '/images/gallery-baikal.jpg'
   },
   {
     name: 'Камчатка',
-    link: 'https://finlandka.github.io/mesto/images/gallery-kamchatka.jpg'
+    link: '/images/gallery-kamchatka.jpg'
   },
   {
     name: 'Кижи',
-    link: 'https://finlandka.github.io/mesto/images/gallery-kiji.jpg'
+    link: '/images/gallery-kiji.jpg'
   },
   {
     name: 'Онежское озеро',
-    link: 'https://finlandka.github.io/mesto/images/gallery-lake-onejskoe.jpg'
+    link: '/images/gallery-lake-onejskoe.jpg'
   },
   {
     name: 'Рыбачий полуостров',
-    link: 'https://finlandka.github.io/mesto/images/gallery-pov-rybaci.jpg'
+    link: '/images/gallery-pov-rybaci.jpg'
   },
   {
     name: 'Сочи',
-    link: 'https://finlandka.github.io/mesto/images/gallery-sochi.jpg'
+    link: '/images/gallery-sochi.jpg'
   }
 ];
 
@@ -72,8 +72,27 @@ function loadGallery() {
   for (let item of deleteButton) {
     item.addEventListener('click', () => item.parentNode.remove()); //наверно, чтобы из массива тоже удалял
   }
+
+  const galleryPic = page.querySelectorAll('.gallery__pic');
+  const lightboxTitle = page.querySelector('.lightbox__title');
+  for (let item of galleryPic) {
+    item.addEventListener('click', () => {
+      lightbox.classList.toggle('lightbox_opened');
+      const lightboxImage = page.querySelector('.lightbox__image');
+      lightboxImage.src = item.src;
+      lightboxImage.alt = item.alt;
+      lightboxTitle.textContent = item.alt;
+    })
+  }
+
+  const closeButtonLigtbox = lightbox.querySelector('.button_action_close');
+  closeButtonLigtbox.addEventListener('click', closeLightbox);
+
 }
 
+function closeLightbox() {
+  lightbox.classList.remove('lightbox_opened');
+}
 
 function openPopup(popupElement, head, button) {
   popup.classList.toggle('popup_opened');
@@ -107,7 +126,7 @@ function openPopup(popupElement, head, button) {
     evt.preventDefault();
     fullname.textContent = formInput[0].value;
     position.textContent = formInput[1].value;
-    close();
+    closePopup();
   }
 
   function uploadPicture (evt) {
@@ -115,11 +134,15 @@ function openPopup(popupElement, head, button) {
     initialCards.push({name: formInput[0].value, link: formInput[1].value});
     page.querySelector('.gallery').remove();
     loadGallery();
-    close();
+    closePopup();
   }
+
+  const closeButtonPopup = popup.querySelector('.button_action_close');
+  closeButtonPopup.addEventListener('click', closePopup);
+
 }
 
-function close() {
+function closePopup() {
   popup.classList.remove('popup_opened');
   page.querySelector('.popup__title').remove();
   page.querySelector('.form').remove();
@@ -129,6 +152,5 @@ loadGallery();
 
 addButton.addEventListener('click', () => openPopup(add, 'Новое место', 'Создать'));
 editButton.addEventListener('click', () => openPopup(edit, 'Редактировать профиль', 'Сохранить'));
-closeButton.addEventListener('click', close);
 
 
