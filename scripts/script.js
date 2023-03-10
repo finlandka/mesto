@@ -53,6 +53,7 @@ function loadGallery() {
     const galleryItem = document.createElement('li');
     galleryItem.classList.add('gallery__item');
     galleryItem.innerHTML = `
+                            <button class="button gallery__delete"></button>
                             <img class="gallery__pic" src="${image.link}" alt="${image.name}">
                             <div class="gallery__desc">
                               <h2 class="gallery__title">${image.name}</h2>
@@ -61,10 +62,15 @@ function loadGallery() {
     `;
     galleryUl.prepend(galleryItem);
   })
+
   const heartButton = page.querySelectorAll('.heart');
-  console.log(heartButton);
   for (let item of heartButton) {
     item.addEventListener('click', () => item.classList.toggle('heart_status_active'));
+  }
+
+  const deleteButton = page.querySelectorAll('.gallery__delete');
+  for (let item of deleteButton) {
+    item.addEventListener('click', () => item.parentNode.remove()); //наверно, чтобы из массива тоже удалял
   }
 }
 
