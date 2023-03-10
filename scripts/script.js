@@ -1,3 +1,4 @@
+//глобальные переменные
 const page = document.querySelector('.page');
 
 const gallerySection = page.querySelector('.gallery-section');
@@ -17,7 +18,8 @@ const formPosition = page.querySelector('#position');
 const add = 'add';
 const edit = 'edit';
 
-const initialCards = [
+//массив с картинками
+let initialCards = [
   {
     name: 'Байкал',
     link: '/images/gallery-baikal.jpg'
@@ -44,6 +46,7 @@ const initialCards = [
   }
 ];
 
+//функция загрузки картинок на страницу
 function loadGallery() {
   const galleryUl = document.createElement('ul');
   galleryUl.classList.add('gallery');
@@ -63,16 +66,24 @@ function loadGallery() {
     galleryUl.prepend(galleryItem);
   })
 
+  //добавление и удаление лайков
   const heartButton = page.querySelectorAll('.heart');
   for (let item of heartButton) {
     item.addEventListener('click', () => item.classList.toggle('heart_status_active'));
   }
 
+  //удаление картинки со страницы и из массива
   const deleteButton = page.querySelectorAll('.gallery__delete');
   for (let item of deleteButton) {
-    item.addEventListener('click', () => item.parentNode.remove()); //наверно, чтобы из массива тоже удалял
+    item.addEventListener('click', () => {
+      item.parentNode.remove();
+      initialCards = initialCards.filter((card) => {return card.name !== item.nextElementSibling.alt});
+      page.querySelector('.gallery').remove();
+      loadGallery();
+    });
   }
 
+  //работа лайтбокса
   const galleryPic = page.querySelectorAll('.gallery__pic');
   const lightboxTitle = page.querySelector('.lightbox__title');
   for (let item of galleryPic) {
@@ -85,15 +96,18 @@ function loadGallery() {
     })
   }
 
+  //закрытие лайтбокса
   const closeButtonLigtbox = lightbox.querySelector('.button_action_close');
   closeButtonLigtbox.addEventListener('click', closeLightbox);
 
 }
 
+//функция закрытия лайтбокса
 function closeLightbox() {
   lightbox.classList.remove('lightbox_opened');
 }
 
+//функция открытия попапа и вставки содержимого в зависимости от кнопки
 function openPopup(popupElement, head, button) {
   popup.classList.toggle('popup_opened');
   const template = page.querySelector('#templateForm').content;
@@ -122,6 +136,7 @@ function openPopup(popupElement, head, button) {
     form.addEventListener('submit', uploadPicture);
   }
 
+  //функция отправки формы изменения данных профиля
   function handleFormSubmit (evt) {
     evt.preventDefault();
     fullname.textContent = formInput[0].value;
@@ -129,6 +144,7 @@ function openPopup(popupElement, head, button) {
     closePopup();
   }
 
+  //функция добавления картинок в массив и на страницу
   function uploadPicture (evt) {
     evt.preventDefault();
     initialCards.push({name: formInput[0].value, link: formInput[1].value});
@@ -137,19 +153,23 @@ function openPopup(popupElement, head, button) {
     closePopup();
   }
 
+  //закрытие попапа
   const closeButtonPopup = popup.querySelector('.button_action_close');
   closeButtonPopup.addEventListener('click', closePopup);
 
 }
 
+//функция закрытия попапа
 function closePopup() {
   popup.classList.remove('popup_opened');
   page.querySelector('.popup__title').remove();
   page.querySelector('.form').remove();
 }
 
+//загрузка картинок на страницу
 loadGallery();
 
+//кнопки добавления и редактирования
 addButton.addEventListener('click', () => openPopup(add, 'Новое место', 'Создать'));
 editButton.addEventListener('click', () => openPopup(edit, 'Редактировать профиль', 'Сохранить'));
 
