@@ -50,14 +50,12 @@ function loadGallery() {
   initialCards.forEach((image) => {
     const templateGalleryItem = templateGallery.content.cloneNode(true);
     const galleryPic = templateGalleryItem.querySelector('.gallery__pic');
-    console.log(templateGalleryItem);
     galleryPic.src = image.link;
     galleryPic.alt = image.name;
     const galleryTitle = templateGalleryItem.querySelector('.gallery__title');
     galleryTitle.textContent = image.name;
     const galleryItem = templateGalleryItem.querySelector('.gallery__item');
     galleryUl.prepend(galleryItem);
-    console.log(galleryItem);
   });
 
   //добавление и удаление лайков
@@ -70,7 +68,6 @@ function loadGallery() {
   const buttonsDelete = page.querySelectorAll('.gallery__delete');
   for (let item of buttonsDelete) {
     item.addEventListener('click', () => {
-      //item.parentNode.remove();
       initialCards = initialCards.filter((card) => {return card.name !== item.nextElementSibling.alt});
       galleryUl.innerHTML = '';
       loadGallery();
