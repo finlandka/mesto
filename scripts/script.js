@@ -1,67 +1,64 @@
 //глобальные переменные
 const page = document.querySelector('.page');
 
+const templateGallery = page.querySelector('#galleryItem');
 const gallerySection = page.querySelector('.gallery-section');
+const galleryUl = page.querySelector('.gallery');
 
 const buttonAdd = page.querySelector('.button_action_add');
 const buttonEdit = page.querySelector('.button_action_edit');
 
 const popup = page.querySelector('.popup');
 const popupContainer = page.querySelector('.popup__container');
-const lightbox = page.querySelector('.lightbox');
-
 const fullname = page.querySelector('.profile__fullname');
 const position = page.querySelector('.profile__position');
 const formName = page.querySelector('#name');
 const formPosition = page.querySelector('#position');
 
+const lightbox = page.querySelector('.lightbox');
+
 //массив с картинками
 let initialCards = [
   {
     name: 'Байкал',
-    link: '/images/gallery-baikal.jpg'
+    link: 'images/gallery-baikal.jpg'
   },
   {
     name: 'Камчатка',
-    link: '/images/gallery-kamchatka.jpg'
+    link: 'images/gallery-kamchatka.jpg'
   },
   {
     name: 'Кижи',
-    link: '/images/gallery-kiji.jpg'
+    link: 'images/gallery-kiji.jpg'
   },
   {
     name: 'Онежское озеро',
-    link: '/images/gallery-lake-onejskoe.jpg'
+    link: 'images/gallery-lake-onejskoe.jpg'
   },
   {
     name: 'Рыбачий полуостров',
-    link: '/images/gallery-pov-rybaci.jpg'
+    link: 'images/gallery-pov-rybaci.jpg'
   },
   {
     name: 'Сочи',
-    link: '/images/gallery-sochi.jpg'
+    link: 'images/gallery-sochi.jpg'
   }
 ];
 
 //функция загрузки картинок на страницу
 function loadGallery() {
-  const galleryUl = document.createElement('ul');
-  galleryUl.classList.add('gallery');
-  gallerySection.append(galleryUl);
-
   initialCards.forEach((image) => {
-    const galleryItem = document.createElement('li');
-    galleryItem.classList.add('gallery__item');
-    galleryItem.innerHTML = `
-                            <button class="button gallery__delete"></button>
-                            <img class="gallery__pic" src="${image.link}" alt="${image.name}">
-                            <div class="gallery__desc">
-                              <h2 class="gallery__title">${image.name}</h2>
-                              <button class="button heart"></button>
-                            </div>
-    `;
+    const templateGalleryItem = templateGallery.content.cloneNode(true);
+    const galleryPic = templateGalleryItem.querySelector('.gallery__pic');
+    console.log(templateGalleryItem);
+    galleryPic.src = image.link;
+    galleryPic.alt = image.name;
+    const galleryTitle = templateGalleryItem.querySelector('.gallery__title');
+    galleryTitle.textContent = image.name;
+    const galleryItem = templateGalleryItem.querySelector('.gallery__item');
     galleryUl.prepend(galleryItem);
-  })
+    console.log(galleryItem);
+  });
 
   //добавление и удаление лайков
   const buttonsHeart = page.querySelectorAll('.heart');
@@ -75,7 +72,7 @@ function loadGallery() {
     item.addEventListener('click', () => {
       //item.parentNode.remove();
       initialCards = initialCards.filter((card) => {return card.name !== item.nextElementSibling.alt});
-      page.querySelector('.gallery').remove();
+      galleryUl.innerHTML = '';
       loadGallery();
     });
   }
@@ -147,7 +144,7 @@ function openPopup(popupElement, head, button) {
   function uploadPicture (evt) {
     evt.preventDefault();
     initialCards.push({name: formInput[0].value, link: formInput[1].value});
-    page.querySelector('.gallery').remove();
+    galleryUl.innerHTML = '';
     loadGallery();
     closePopup();
   }

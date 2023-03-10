@@ -25,7 +25,20 @@
         </div>
         <button class="button button_action_add" aria-label="Добавить"></button>
       </section>
-      <section class="gallery-section"></section>
+      <section class="gallery-section">
+        <ul class="gallery">
+          <template id="galleryItem">
+            <li class="gallery__item">
+              <button class="button gallery__delete"></button>
+              <img class="gallery__pic" src="" alt="">
+              <div class="gallery__desc">
+                <h2 class="gallery__title"></h2>
+                <button class="button heart"></button>
+              </div>
+            </li>
+          </template>
+        </ul>
+      </section>
       </main>
       <footer class="footer">
         <p class="footer__copyright">© 2020 Mesto Russia</p>
@@ -49,7 +62,7 @@
   <div class="lightbox">
     <div class="lightbox__container">
       <button class="button button_action_close" aria-label="Закрыть"></button>
-      <img class="lightbox__image">
+      <img class="lightbox__image" src="" alt="">
       <h2 class="lightbox__title"></h2>
     </div>
   </div>
