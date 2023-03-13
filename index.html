@@ -45,25 +45,35 @@
       </footer>
   </div>
 
-  <div class="popup">
+  <div class="popup popup_edit-profile">
     <div class="popup__container">
       <button class="button button_action_close" aria-label="Закрыть"></button>
-      <template id="templateForm">
-        <h2 class="popup__title"></h2>
+        <h2 class="popup__title">Редактировать профиль</h2>
         <form class="form">
-          <input class="form__input" type="text">
-          <input class="form__input" type="text">
-          <button class="form__button" type="submit"></button>
+          <input class="form__input" type="text" placeholder="Имя">
+          <input class="form__input" type="text" placeholder="Вид деятельности">
+          <button class="form__button" type="submit">Сохранить</button>
         </form>
-      </template>
     </div>
   </div>
 
-  <div class="lightbox">
-    <div class="lightbox__container">
+  <div class="popup popup_add-card">
+    <div class="popup__container">
       <button class="button button_action_close" aria-label="Закрыть"></button>
-      <img class="lightbox__image" src="images/gallery-baikal.jpg" alt="Байкал">
-      <h2 class="lightbox__title">Байкал</h2>
+        <h2 class="popup__title">Новое место</h2>
+        <form class="form">
+          <input class="form__input" type="text" placeholder="Название">
+          <input class="form__input" type="text" placeholder="Ссылка на картинку">
+          <button class="form__button" type="submit">Создать</button>
+        </form>
+    </div>
+  </div>
+
+  <div class="popup popup_image">
+    <div class="popup__image-container">
+      <button class="button button_action_close" aria-label="Закрыть"></button>
+      <img class="popup__image" src="images/gallery-baikal.jpg" alt="Байкал">
+      <h2 class="popup__desc">Байкал</h2>
     </div>
   </div>
 
