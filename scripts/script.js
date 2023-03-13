@@ -54,6 +54,14 @@ let initialCards = [
   }
 ];
 
+  //функция добавления картинок в массив
+  function uploadPicture (form) {
+    initialCards.push({name: form[0].value, link: form[1].value});
+    const newImage = {name: form[0].value, link: form[1].value};
+    galleryUl.prepend(createCard(newImage));
+    closePopup(popupCardAdd);
+  }
+
 function createCard(image){
     const templateGalleryItem = templateGallery.content.cloneNode(true);
     const galleryPic = templateGalleryItem.querySelector('.gallery__pic');
@@ -61,6 +69,24 @@ function createCard(image){
     galleryPic.alt = image.name;
     const galleryTitle = templateGalleryItem.querySelector('.gallery__title');
     galleryTitle.textContent = image.name;
+
+    //лайки
+    const heart = templateGalleryItem.querySelector('.heart');
+    heart.addEventListener('click', () => heart.classList.toggle('heart_status_active'));
+
+    //удаление картинок
+    const buttonDelete = templateGalleryItem.querySelector('.gallery__delete');
+    buttonDelete.addEventListener('click', () => {
+      initialCards = initialCards.filter((card) => {return card.name !== buttonDelete.nextElementSibling.alt});
+      buttonDelete.parentNode.remove();
+    });
+
+    //просмотр картинок
+    galleryPic.addEventListener('click', () => {
+      openPopup(popupImage);
+      loadImg(galleryPic);
+    })
+
     return templateGalleryItem.querySelector('.gallery__item');
 }
 
@@ -70,34 +96,6 @@ function loadGallery() {
     const galleryItem = createCard(image);
     galleryUl.prepend(galleryItem);
   });
-
-
-
-  //добавление и удаление лайков
-  const buttonsHeart = page.querySelectorAll('.heart');
-  for (let item of buttonsHeart) {
-    item.addEventListener('click', () => item.classList.toggle('heart_status_active'));
-  }
-
-  //удаление картинки со страницы и из массива
-  const buttonsDelete = page.querySelectorAll('.gallery__delete');
-  for (let item of buttonsDelete) {
-    item.addEventListener('click', () => {
-      initialCards = initialCards.filter((card) => {return card.name !== item.nextElementSibling.alt});
-      galleryUl.innerHTML = '';
-      loadGallery();
-    });
-  }
-
-//слушаем картинки по клику
-  const galleryPics = page.querySelectorAll('.gallery__pic');
-  for (let item of galleryPics) {
-    item.addEventListener('click', () => {
-      openPopup(popupImage);
-      loadImg(item);
-    });
-  }
-
 }
 
 //функция загрузки картинки и описания в попап
@@ -113,17 +111,6 @@ function loadImg(img) {
     position.textContent = form[1].value;
     closePopup(popupProfileEdit);
   }
-
-
-
-  //функция добавления картинок в массив
-  function uploadPicture (form) {
-    initialCards.push({name: form[0].value, link: form[1].value});
-    galleryUl.innerHTML = '';
-    loadGallery();
-    closePopup(popupCardAdd);
-  }
-
 
 //функцмя открытия попапа
 function openPopup(popup) {

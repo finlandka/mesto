@@ -1,7 +1,3 @@
-.popup_image {
-  
-}
-
 .popup_image::before {
   opacity: .9;
 }
