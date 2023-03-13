@@ -54,18 +54,24 @@ let initialCards = [
   }
 ];
 
-//функция загрузки картинок на страницу и действий с ними
-function loadGallery() {
-  initialCards.forEach((image) => {
+function createCard(image){
     const templateGalleryItem = templateGallery.content.cloneNode(true);
     const galleryPic = templateGalleryItem.querySelector('.gallery__pic');
     galleryPic.src = image.link;
     galleryPic.alt = image.name;
     const galleryTitle = templateGalleryItem.querySelector('.gallery__title');
     galleryTitle.textContent = image.name;
-    const galleryItem = templateGalleryItem.querySelector('.gallery__item');
+    return templateGalleryItem.querySelector('.gallery__item');
+}
+
+//функция загрузки картинок на страницу и действий с ними
+function loadGallery() {
+  initialCards.forEach((image) => {
+    const galleryItem = createCard(image);
     galleryUl.prepend(galleryItem);
   });
+
+
 
   //добавление и удаление лайков
   const buttonsHeart = page.querySelectorAll('.heart');
@@ -108,7 +114,7 @@ function loadImg(img) {
     closePopup(popupProfileEdit);
   }
 
-  
+
 
   //функция добавления картинок в массив
   function uploadPicture (form) {
