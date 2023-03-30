@@ -1,11 +1,11 @@
-.form__button {
+.popup__button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border: none;
-  border-radius: 0;
+  border: 1px solid #000;
+  border-radius: 2px;
   cursor: pointer;
-  margin: 48px 0 0;
+  margin: 17px 0 0;
   width: 100%;
   background-color: #000;
   color: #fff;
@@ -16,14 +16,14 @@
   line-height: 21.78px;
 }
 
-.form__button:hover {
+.popup__button:hover {
   opacity: .8;
 }
 
 @media screen and (max-width: 570px) {
-  .form__button {
+  .popup__button {
     font-size: 14px;
     line-height: 16.94px;
-    padding: 14px 0;
+    margin: 14px 0 0;
   }
 }

@@ -26,6 +26,9 @@ const formAddCard = page.querySelector("#formAddCard");
 const inputPlaceName = page.querySelector("#placeName");
 const inputPlaceUrl = page.querySelector("#placeUrl");
 
+inputName.value = fullname.textContent;
+inputPosition.value = position.textContent;
+
 function createCard(image) {
   const templateGalleryItem = templateGallery.content.cloneNode(true);
   const galleryPic = templateGalleryItem.querySelector(".gallery__pic");
@@ -90,8 +93,6 @@ function closePopup(popupTemplate) {
 //функция открытия профиля
 function openEditProfilePopup() {
   openPopup(popupEditProfile);
-  inputName.value = fullname.textContent;
-  inputPosition.value = position.textContent;
 }
 
 //функция добавления картинок

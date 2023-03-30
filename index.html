@@ -49,10 +49,12 @@
     <div class="popup__container">
       <button class="button button_action_close" aria-label="Закрыть"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
-        <form class="form" id="formEditProfile">
-          <input class="form__input" id="formName" type="text" placeholder="Имя">
-          <input class="form__input" id="formPosition" type="text" placeholder="Вид деятельности">
-          <button class="form__button" type="submit">Сохранить</button>
+        <form class="popup__form" id="formEditProfile" novalidate>
+          <input class="popup__input" id="formName" type="text" placeholder="Имя" minlength="2" maxlength="40" required>
+          <span class="formName-error popup__error"></span>
+          <input class="popup__input" id="formPosition" type="text" placeholder="Вид деятельности" minlength="2" maxlength="200" required>
+          <span class="formPosition-error popup__error"></span>
+          <button class="popup__button" type="submit">Сохранить</button>
         </form>
     </div>
   </div>
@@ -61,10 +63,12 @@
     <div class="popup__container">
       <button class="button button_action_close" aria-label="Закрыть"></button>
         <h2 class="popup__title">Новое место</h2>
-        <form class="form" id="formAddCard">
-          <input class="form__input" id="placeName" type="text" placeholder="Название">
-          <input class="form__input" id="placeUrl" type="text" placeholder="Ссылка на картинку">
-          <button class="form__button" type="submit">Создать</button>
+        <form class="popup__form" id="formAddCard" novalidate>
+          <input class="popup__input" id="placeName" type="text" placeholder="Название" minlength="2" maxlength="30" required>
+          <span class="placeName-error popup__error"></span>
+          <input class="popup__input" id="placeUrl" type="url" placeholder="Ссылка на картинку" required>
+          <span class="placeUrl-error popup__error"></span>
+          <button class="popup__button" type="submit">Создать</button>
         </form>
     </div>
   </div>
@@ -79,5 +83,6 @@
 
   <script src="scripts/constants.js"></script>
   <script src="scripts/script.js"></script>
+  <script src="scripts/validate.js"></script>
 </body>
 </html>
