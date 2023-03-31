@@ -79,15 +79,15 @@ function submitEditProfileForm() {
   closePopup(popupEditProfile);
 }
 
-function pressEsc (evt, popupTemplate) {
-  if (evt.key === 'Escape') {
+function pressEsc(evt, popupTemplate) {
+  if (evt.key === "Escape") {
     closePopup(popupTemplate);
   }
 }
 
-function clickOverlay (evt, popupTemplate) {
+function clickOverlay(evt, popupTemplate) {
   if (evt.target === popupTemplate) {
-    closePopup(popupTemplate)
+    closePopup(popupTemplate);
   }
 }
 
@@ -103,25 +103,63 @@ function toggleEventListener(element, eventType, callback, isAdd) {
 function openPopup(popupTemplate) {
   popupTemplate.classList.toggle("popup_opened");
 
-//  вешаем слушатель нажатия кнопки на документ
-  toggleEventListener(document, 'keydown', (evt) => {pressEsc(evt, popupTemplate)}, true);
-//вешаем слушатель клика на оверлэй
-  toggleEventListener(popupTemplate, 'click', (evt) => {clickOverlay(evt, popupTemplate)}, true);
-//вешаем слушателя клика на крестик
+  //  вешаем слушатель нажатия кнопки на документ
+  toggleEventListener(
+    document,
+    "keydown",
+    (evt) => {
+      pressEsc(evt, popupTemplate);
+    },
+    true
+  );
+  //вешаем слушатель клика на оверлэй
+  toggleEventListener(
+    popupTemplate,
+    "click",
+    (evt) => {
+      clickOverlay(evt, popupTemplate);
+    },
+    true
+  );
+  //вешаем слушателя клика на крестик
   const buttonClosePopup = popupTemplate.querySelector(".button_action_close");
-  toggleEventListener(buttonClosePopup, 'click', () =>  closePopup(popupTemplate), true);
+  toggleEventListener(
+    buttonClosePopup,
+    "click",
+    () => closePopup(popupTemplate),
+    true
+  );
 }
 
 //функция закрытия попапа
 function closePopup(popupTemplate) {
   popupTemplate.classList.remove("popup_opened");
 
-  toggleEventListener(document, 'keydown', (evt) => {pressEsc(evt, popupTemplate)}, false);
+  toggleEventListener(
+    document,
+    "keydown",
+    (evt) => {
+      pressEsc(evt, popupTemplate);
+    },
+    false
+  );
 
-  toggleEventListener(popupTemplate, 'click', (evt) => {clickOverlay(evt, popupTemplate)}, false);
+  toggleEventListener(
+    popupTemplate,
+    "click",
+    (evt) => {
+      clickOverlay(evt, popupTemplate);
+    },
+    false
+  );
 
   const buttonClosePopup = popupTemplate.querySelector(".button_action_close");
-  toggleEventListener(buttonClosePopup, 'click', () =>  closePopup(popupTemplate), false);
+  toggleEventListener(
+    buttonClosePopup,
+    "click",
+    () => closePopup(popupTemplate),
+    false
+  );
 }
 
 //функция открытия профиля
@@ -143,20 +181,34 @@ function openAddCardPopup() {
 }
 
 //слушаем кнопки
-toggleEventListener(buttonOpenEditProfilePopup, 'click', openEditProfilePopup, true);
+toggleEventListener(
+  buttonOpenEditProfilePopup,
+  "click",
+  openEditProfilePopup,
+  true
+);
 
-toggleEventListener(buttonOpenAddCardPopup, 'click', openAddCardPopup, true);
+toggleEventListener(buttonOpenAddCardPopup, "click", openAddCardPopup, true);
 
+toggleEventListener(
+  formAddCard,
+  "submit",
+  (evt) => {
+    evt.preventDefault();
+    uploadPicture();
+  },
+  true
+);
 
-toggleEventListener(formAddCard, 'submit', (evt) => {
-  evt.preventDefault();
-  uploadPicture();
-}, true);
-
-toggleEventListener(formEditProfile, 'submit', (evt) => {
-  evt.preventDefault();
-  submitEditProfileForm();
-}, true);
+toggleEventListener(
+  formEditProfile,
+  "submit",
+  (evt) => {
+    evt.preventDefault();
+    submitEditProfileForm();
+  },
+  true
+);
 
 //загрузка картинок на страницу
 loadGallery();

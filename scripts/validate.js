@@ -1,18 +1,17 @@
-
 function hasInvalidInput(inputList) {
-    return inputList.some(inputElement => {
-        return !inputElement.validity.valid;
-    })
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  });
 }
 
 function toggleButtonState(options, inputList, buttonElement) {
-    if (hasInvalidInput(inputList)) {
-        buttonElement.classList.add(options.inactiveButtonClass);
-        buttonElement.disabled = true;
-      } else {
-        buttonElement.classList.remove(options.inactiveButtonClass);
-        buttonElement.disabled = false;
-      }
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add(options.inactiveButtonClass);
+    buttonElement.disabled = true;
+  } else {
+    buttonElement.classList.remove(options.inactiveButtonClass);
+    buttonElement.disabled = false;
+  }
 }
 
 function showInputError(options, formElement, inputElement, errorMessage) {
@@ -30,31 +29,36 @@ function hideInputError(options, formElement, inputElement) {
 
 function isValid(options, formElement, inputElement) {
   if (!inputElement.validity.valid) {
-    showInputError(options, formElement, inputElement, inputElement.validationMessage);
+    showInputError(
+      options,
+      formElement,
+      inputElement,
+      inputElement.validationMessage
+    );
   } else {
     hideInputError(options, formElement, inputElement);
   }
-};
+}
 
 function setEventListeners(options, formElement) {
-  const inputList = Array.from(formElement.querySelectorAll(options.inputSelector));
+  const inputList = Array.from(
+    formElement.querySelectorAll(options.inputSelector)
+  );
   const buttonElement = formElement.querySelector(options.submitButtonSelector);
   toggleButtonState(options, inputList, buttonElement);
-  inputList.forEach(inputElement => {
-    inputElement.addEventListener('input', () => {
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener("input", () => {
       isValid(options, formElement, inputElement);
       toggleButtonState(options, inputList, buttonElement);
-    })
-  })
+    });
+  });
 }
 
 function enableValidation(options) {
   const formList = Array.from(document.querySelectorAll(options.formSelector));
-  formList.forEach(formElement => {
+  formList.forEach((formElement) => {
     setEventListeners(options, formElement);
-  })
+  });
 }
 
 enableValidation(optionsClasses);
-
-
