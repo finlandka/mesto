@@ -10,6 +10,9 @@ const buttonOpenEditProfilePopup = page.querySelector(".button_action_edit");
 
 const popupEditProfile = page.querySelector(".popup_edit-profile");
 const popupAddCard = page.querySelector(".popup_add-card");
+const buttonClosePopupAddCard = popupAddCard.querySelector(".popup__button");
+const buttonClosePopupEditProfile =
+  popupEditProfile.querySelector(".popup__button");
 const popupImage = page.querySelector(".popup_image");
 
 const fullname = page.querySelector(".profile__fullname");
@@ -25,8 +28,12 @@ const formAddCard = page.querySelector("#formAddCard");
 const inputPlaceName = page.querySelector("#placeName");
 const inputPlaceUrl = page.querySelector("#placeUrl");
 
-inputName.value = fullname.textContent;
-inputPosition.value = position.textContent;
+function loadDataPopupEditProfile() {
+  inputName.value = fullname.textContent;
+  inputPosition.value = position.textContent;
+}
+
+loadDataPopupEditProfile();
 
 function createCard(image) {
   const templateGalleryItem = templateGallery.content.cloneNode(true);
@@ -79,13 +86,13 @@ function submitEditProfileForm() {
   closePopup(popupEditProfile);
 }
 
-function pressEsc(evt, popupTemplate) {
+function pressEsc(popupTemplate, evt) {
   if (evt.key === "Escape") {
     closePopup(popupTemplate);
   }
 }
 
-function clickOverlay(evt, popupTemplate) {
+function clickOverlay(popupTemplate, evt) {
   if (evt.target === popupTemplate) {
     closePopup(popupTemplate);
   }
@@ -101,69 +108,42 @@ function toggleEventListener(element, eventType, callback, isAdd) {
 
 //функцмя открытия попапа
 function openPopup(popupTemplate) {
-  popupTemplate.classList.toggle("popup_opened");
+  popupTemplate.classList.add("popup_opened");
+  //создаем новые функции с переданным popupTemplate
+  const pressEscWrapper = (evt) => pressEsc(popupTemplate, evt);
+  const clickOverlayWrapper = (evt) => clickOverlay(popupTemplate, evt);
+  const closePopupWrapper = (evt) => closePopup(popupTemplate, evt);
 
   //  вешаем слушатель нажатия кнопки на документ
-  toggleEventListener(
-    document,
-    "keydown",
-    (evt) => {
-      pressEsc(evt, popupTemplate);
-    },
-    true
-  );
+  toggleEventListener(document, "keydown", pressEscWrapper, true);
   //вешаем слушатель клика на оверлэй
-  toggleEventListener(
-    popupTemplate,
-    "click",
-    (evt) => {
-      clickOverlay(evt, popupTemplate);
-    },
-    true
-  );
+  toggleEventListener(popupTemplate, "click", clickOverlayWrapper, true);
+
   //вешаем слушателя клика на крестик
   const buttonClosePopup = popupTemplate.querySelector(".button_action_close");
-  toggleEventListener(
-    buttonClosePopup,
-    "click",
-    () => closePopup(popupTemplate),
-    true
-  );
+  toggleEventListener(buttonClosePopup, "click", closePopupWrapper, true);
 }
 
 //функция закрытия попапа
 function closePopup(popupTemplate) {
   popupTemplate.classList.remove("popup_opened");
 
-  toggleEventListener(
-    document,
-    "keydown",
-    (evt) => {
-      pressEsc(evt, popupTemplate);
-    },
-    false
-  );
+  const pressEscWrapper = (evt) => pressEsc(popupTemplate, evt);
+  const clickOverlayWrapper = (evt) => clickOverlay(popupTemplate, evt);
+  const closePopupWrapper = (evt) => closePopup(popupTemplate, evt);
 
-  toggleEventListener(
-    popupTemplate,
-    "click",
-    (evt) => {
-      clickOverlay(evt, popupTemplate);
-    },
-    false
-  );
+  toggleEventListener(document, "keydown", pressEscWrapper, false);
+  toggleEventListener(popupTemplate, "click", clickOverlayWrapper, false);
 
   const buttonClosePopup = popupTemplate.querySelector(".button_action_close");
-  toggleEventListener(
-    buttonClosePopup,
-    "click",
-    () => closePopup(popupTemplate),
-    false
-  );
+  toggleEventListener(buttonClosePopup, "click", closePopupWrapper, false);
 }
 
 //функция открытия профиля
 function openEditProfilePopup() {
+  loadDataPopupEditProfile();
+  checkInputValueEmpty(popupEditProfile, buttonClosePopupEditProfile);
+  deleteErrors(popupEditProfile);
   openPopup(popupEditProfile);
 }
 
@@ -173,10 +153,37 @@ function uploadPicture() {
   galleryUl.prepend(createCard(newImage));
   closePopup(popupAddCard);
 }
+//функция проверки инпутов на пустоту
+function checkInputValueEmpty(popupTemplate, buttonClosePopap) {
+  const inputList = Array.from(
+    popupTemplate.querySelectorAll(optionsClasses.inputSelector)
+  );
+  inputList.forEach((input) => {
+    if (!input.value) {
+      buttonClosePopap.classList.add(optionsClasses.inactiveButtonClass);
+      buttonClosePopap.disabled = true;
+    } else {
+      buttonClosePopap.classList.remove(optionsClasses.inactiveButtonClass);
+      buttonClosePopap.disabled = false;
+    }
+  });
+}
+//функция очистки ошибок валидации в верстке
+function deleteErrors(popupTemplate) {
+  const inputList = Array.from(
+    popupTemplate.querySelectorAll(optionsClasses.inputSelector)
+  );
+  inputList.forEach((input) => {
+    input.classList.remove(optionsClasses.inputErrorClass);
+    input.nextElementSibling.classList.remove(optionsClasses.errorClass);
+  });
+}
 
 //функция открытия добавления картинок
 function openAddCardPopup() {
   formAddCard.reset();
+  checkInputValueEmpty(popupAddCard, buttonClosePopupAddCard);
+  deleteErrors(popupAddCard);
   openPopup(popupAddCard);
 }
 
