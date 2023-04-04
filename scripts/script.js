@@ -2,6 +2,7 @@
 const page = document.querySelector(".page");
 
 const templateGallery = page.querySelector("#galleryItem");
+const galleryItem = templateGallery.content.querySelector(".gallery__item");
 const gallerySection = page.querySelector(".gallery-section");
 const galleryUl = page.querySelector(".gallery");
 
@@ -11,8 +12,7 @@ const buttonOpenEditProfilePopup = page.querySelector(".button_action_edit");
 const popupEditProfile = page.querySelector(".popup_edit-profile");
 const popupAddCard = page.querySelector(".popup_add-card");
 const buttonClosePopupAddCard = popupAddCard.querySelector(".popup__button");
-const buttonClosePopupEditProfile =
-  popupEditProfile.querySelector(".popup__button");
+const buttonClosePopupEditProfile = popupEditProfile.querySelector(".popup__button");
 const popupImage = page.querySelector(".popup_image");
 
 const fullname = page.querySelector(".profile__fullname");
@@ -36,7 +36,7 @@ function loadDataPopupEditProfile() {
 loadDataPopupEditProfile();
 
 function createCard(image) {
-  const templateGalleryItem = templateGallery.content.cloneNode(true);
+  const templateGalleryItem = galleryItem.cloneNode(true);
   const galleryPic = templateGalleryItem.querySelector(".gallery__pic");
   galleryPic.src = image.link;
   galleryPic.alt = image.name;
@@ -61,7 +61,7 @@ function createCard(image) {
     loadImgPopup(galleryPic);
   });
 
-  return templateGalleryItem.querySelector(".gallery__item");
+  return templateGalleryItem;
 }
 
 //функция загрузки картинок на страницу
@@ -158,24 +158,15 @@ function checkInputValueEmpty(popupTemplate, buttonClosePopap) {
   const inputList = Array.from(
     popupTemplate.querySelectorAll(optionsClasses.inputSelector)
   );
-  inputList.forEach((input) => {
-    if (!input.value) {
-      buttonClosePopap.classList.add(optionsClasses.inactiveButtonClass);
-      buttonClosePopap.disabled = true;
-    } else {
-      buttonClosePopap.classList.remove(optionsClasses.inactiveButtonClass);
-      buttonClosePopap.disabled = false;
-    }
-  });
+  toggleButtonState(inputList, buttonClosePopap, optionsClasses);
 }
 //функция очистки ошибок валидации в верстке
 function deleteErrors(popupTemplate) {
   const inputList = Array.from(
     popupTemplate.querySelectorAll(optionsClasses.inputSelector)
   );
-  inputList.forEach((input) => {
-    input.classList.remove(optionsClasses.inputErrorClass);
-    input.nextElementSibling.classList.remove(optionsClasses.errorClass);
+  inputList.forEach((inputElement) => {
+    hideInputError(popupTemplate, inputElement, optionsClasses);
   });
 }
 
