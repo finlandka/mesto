@@ -1,33 +1,7 @@
+import { initialCards } from './constants.js';
 import { openPopup, closePopup, toggleEventListener } from "./utils.js";
 import { Card } from "./Card.js";
 import { FormValidator } from "./FormValidator.js";
-
-const initialCards = [
-  {
-    name: "Байкал",
-    link: "images/gallery-baikal.jpg",
-  },
-  {
-    name: "Камчатка",
-    link: "images/gallery-kamchatka.jpg",
-  },
-  {
-    name: "Кижи",
-    link: "images/gallery-kiji.jpg",
-  },
-  {
-    name: "Онежское озеро",
-    link: "images/gallery-lake-onejskoe.jpg",
-  },
-  {
-    name: "Рыбачий полуостров",
-    link: "images/gallery-pov-rybaci.jpg",
-  },
-  {
-    name: "Сочи",
-    link: "images/gallery-sochi.jpg",
-  },
-];
 
 const optionsClasses = {
   formSelector: ".popup__form",
@@ -58,11 +32,14 @@ const formAddCard = page.querySelector("#formAddCard");
 const inputPlaceName = page.querySelector("#placeName");
 const inputPlaceUrl = page.querySelector("#placeUrl");
 
-//рендеринг картинок
+function createCard(image) {
+  galleryUl.prepend(new Card(image, "#galleryItem").generateCard());
+}
+
+//рендеринг всех картинок
 function loadGallery() {
   initialCards.forEach((image) => {
-    const galleryItem = new Card(image, "#galleryItem");
-    galleryUl.prepend(galleryItem.generateCard());
+    createCard(image);
   });
 }
 
@@ -82,39 +59,31 @@ function submitEditProfileForm() {
   closePopup(popupEditProfile);
 }
 
+//создаем экземпляр класса валидации на каждую форму
+const validationFormEditProfile = new FormValidator(optionsClasses, formEditProfile);
+const validationFormAddCard = new FormValidator(optionsClasses, formAddCard);
+
 //функция открытия профиля
 function openEditProfilePopup() {
   loadDataPopupEditProfile();
-  deleteErrors(popupEditProfile);
-  new FormValidator(optionsClasses, formEditProfile).enableValidation();
+  validationFormEditProfile.removeValidationErrors();
+  validationFormEditProfile.enableValidation();
   openPopup(popupEditProfile);
-}
-
-//функция добавления картинок
-function uploadPicture() {
-  const newImage = { name: inputPlaceName.value, link: inputPlaceUrl.value };
-  galleryUl.prepend(new Card(newImage, "#galleryItem").generateCard());
-  closePopup(popupAddCard);
-}
-
-//функция очистки ошибок валидации в верстке
-function deleteErrors(popupTemplate) {
-  const inputList = Array.from(
-    popupTemplate.querySelectorAll(optionsClasses.inputSelector)
-  );
-  inputList.forEach((inputElement) => {
-    new FormValidator(optionsClasses, popupTemplate).hideInputError(
-      inputElement
-    );
-  });
 }
 
 //функция открытия добавления картинок
 function openAddCardPopup() {
   formAddCard.reset();
-  new FormValidator(optionsClasses, formAddCard).enableValidation();
-  deleteErrors(popupAddCard);
+  validationFormAddCard.removeValidationErrors();
+  validationFormAddCard.enableValidation();
   openPopup(popupAddCard);
+}
+
+//функция добавления картинок
+function uploadPicture() {
+  const newImage = { name: inputPlaceName.value, link: inputPlaceUrl.value };
+  createCard(newImage);
+  closePopup(popupAddCard);
 }
 
 //слушаем кнопки

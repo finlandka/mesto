@@ -39,7 +39,7 @@ class FormValidator {
     errorElement.classList.add(this._errorClass);
   }
 
-  hideInputError(input) {
+  _hideInputError(input) {
     input.classList.remove(this._inputErrorClass);
     const errorElement = this._formElement.querySelector(`.${input.id}-error`);
     errorElement.classList.remove(this._errorClass);
@@ -49,7 +49,7 @@ class FormValidator {
     if (!input.validity.valid) {
       this._showInputError(input);
     } else {
-      this.hideInputError(input);
+      this._hideInputError(input);
     }
   }
 
@@ -66,6 +66,13 @@ class FormValidator {
       this._setEventListeners(input);
     });
   }
+
+  removeValidationErrors() {
+    this._inputList.forEach(input => {
+      this._hideInputError(input);
+    })
+  }
+
 }
 
 export { FormValidator };
