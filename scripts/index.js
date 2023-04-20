@@ -70,6 +70,7 @@ validationFormAddCard.enableValidation();
 function openEditProfilePopup() {
   loadDataPopupEditProfile();
   validationFormEditProfile.removeValidationErrors();
+  validationFormEditProfile.toggleButtonState();
   openPopup(popupEditProfile);
 }
 
