@@ -63,11 +63,13 @@ function submitEditProfileForm() {
 const validationFormEditProfile = new FormValidator(optionsClasses, formEditProfile);
 const validationFormAddCard = new FormValidator(optionsClasses, formAddCard);
 
+validationFormEditProfile.enableValidation();
+validationFormAddCard.enableValidation();
+
 //функция открытия профиля
 function openEditProfilePopup() {
   loadDataPopupEditProfile();
   validationFormEditProfile.removeValidationErrors();
-  validationFormEditProfile.enableValidation();
   openPopup(popupEditProfile);
 }
 
@@ -75,7 +77,6 @@ function openEditProfilePopup() {
 function openAddCardPopup() {
   formAddCard.reset();
   validationFormAddCard.removeValidationErrors();
-  validationFormAddCard.enableValidation();
   openPopup(popupAddCard);
 }
 
