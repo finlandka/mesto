@@ -1,4 +1,4 @@
-import { openPopup, closePopup } from "./utils.js";
+import { openPopup } from "./utils.js";
 
 class Card {
   constructor(data, templateSelector) {
@@ -10,7 +10,6 @@ class Card {
     this._buttonDelete = this._element.querySelector(".gallery__delete");
     this._popupImage = document.querySelector(".popup_image");
     this._galleryPic = this._element.querySelector(".gallery__pic");
-    this._buttonClose = this._popupImage.querySelector(".button_action_close");
     this._imageInPopup = this._popupImage.querySelector(".popup__image");
     this._imageDescPopup = this._popupImage.querySelector(".popup__desc");
   }
@@ -48,9 +47,6 @@ class Card {
       openPopup(this._popupImage);
     });
 
-    this._buttonClose.addEventListener("click", () => {
-      closePopup(this._popupImage);
-    });
   }
 
   _toggleLike() {
