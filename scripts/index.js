@@ -77,6 +77,7 @@ function openEditProfilePopup() {
 function openAddCardPopup() {
   formAddCard.reset();
   validationFormAddCard.removeValidationErrors();
+  validationFormAddCard.toggleButtonState();
   openPopup(popupAddCard);
 }
 
