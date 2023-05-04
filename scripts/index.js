@@ -1,6 +1,8 @@
 import { initialCards } from './constants.js';
 import { openPopup, closePopup, toggleEventListener } from "./utils.js";
+import Section from './Section.js';
 import { Card } from "./Card.js";
+import PopupWithImage from "./PopupWithImage.js";
 import { FormValidator } from "./FormValidator.js";
 
 const optionsClasses = {
@@ -14,7 +16,6 @@ const optionsClasses = {
 
 //глобальные переменные
 const page = document.querySelector(".page");
-const galleryUl = page.querySelector(".gallery");
 
 const buttonOpenAddCardPopup = page.querySelector(".button_action_add");
 const buttonOpenEditProfilePopup = page.querySelector(".button_action_edit");
@@ -32,18 +33,22 @@ const formAddCard = page.querySelector("#formAddCard");
 const inputPlaceName = page.querySelector("#placeName");
 const inputPlaceUrl = page.querySelector("#placeUrl");
 
-function createCard(image) {
-  galleryUl.prepend(new Card(image, "#galleryItem").generateCard());
-}
 
-//рендеринг всех картинок
-function loadGallery() {
-  initialCards.forEach((image) => {
-    createCard(image);
-  });
-}
+const defaultGallery = new Section({
+  items: initialCards,
+  renderer: (item) => {
+    defaultGallery.addItem(new Card(
+      item,
+      "#galleryItem",
+      () => {
+        new PopupWithImage('.popup_image', item).open();
+      }
+      ).generateCard());
+  }
+}, '.gallery');
 
-loadGallery();
+defaultGallery.renderItems();
+
 
 function loadDataPopupEditProfile() {
   inputName.value = fullname.textContent;
