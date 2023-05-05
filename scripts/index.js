@@ -1,39 +1,30 @@
-import { initialCards } from './constants.js';
-import { openPopup, closePopup, toggleEventListener } from "./utils.js";
+import { 
+  initialCards,
+  optionsClasses,
+  gallery,
+  buttonOpenAddCardPopup,
+  buttonOpenEditProfilePopup,
+  popupEditProfile,
+  popupAddCard,
+  popupImage,
+  fullname,
+  position,
+  formEditProfile,
+  inputName,
+  inputPosition,
+  formAddCard
+} from './constants.js';
 import Section from './Section.js';
-import { Card } from "./Card.js";
+import Card from "./Card.js";
 import PopupWithImage from "./PopupWithImage.js";
-import { FormValidator } from "./FormValidator.js";
+import PopupWithForm from "./PopupWithForm.js";
+import UserInfo from "./UserInfo.js";
+import FormValidator from "./FormValidator.js";
 
-const optionsClasses = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-};
+//const inputPlaceName = page.querySelector("#placeName");
+//const inputPlaceUrl = page.querySelector("#placeUrl");
 
-//глобальные переменные
-const page = document.querySelector(".page");
-
-const buttonOpenAddCardPopup = page.querySelector(".button_action_add");
-const buttonOpenEditProfilePopup = page.querySelector(".button_action_edit");
-
-const popupEditProfile = page.querySelector(".popup_edit-profile");
-const popupAddCard = page.querySelector(".popup_add-card");
-
-const fullname = page.querySelector(".profile__fullname");
-const position = page.querySelector(".profile__position");
-
-const formEditProfile = page.querySelector("#formEditProfile");
-const inputName = page.querySelector("#formName");
-const inputPosition = page.querySelector("#formPosition");
-const formAddCard = page.querySelector("#formAddCard");
-const inputPlaceName = page.querySelector("#placeName");
-const inputPlaceUrl = page.querySelector("#placeUrl");
-
-
+//создание экземпляра класса Section и Card и применение метода отрисовки
 const defaultGallery = new Section({
   items: initialCards,
   renderer: (item) => {
@@ -41,85 +32,83 @@ const defaultGallery = new Section({
       item,
       "#galleryItem",
       () => {
-        new PopupWithImage('.popup_image', item).open();
+        new PopupWithImage(popupImage, item).open();
       }
       ).generateCard());
   }
-}, '.gallery');
+}, gallery);
 
 defaultGallery.renderItems();
 
+//создание экземпляра класса UserInfo
+const userInfo = new UserInfo({
+  name: fullname,
+  info: position
+});
 
-function loadDataPopupEditProfile() {
-  inputName.value = fullname.textContent;
-  inputPosition.value = position.textContent;
-}
+/////////Edit add card
 
-loadDataPopupEditProfile();
+//слушаем кнопку
+buttonOpenAddCardPopup.addEventListener('click', openAddCardPopup);
 
-//функция отправки формы изменения данных профиля
-function submitEditProfileForm() {
-  fullname.textContent = inputName.value;
-  position.textContent = inputPosition.value;
-  closePopup(popupEditProfile);
-}
-
-//создаем экземпляр класса валидации на каждую форму
-const validationFormEditProfile = new FormValidator(optionsClasses, formEditProfile);
+//создаем экземпляр класса валидации
 const validationFormAddCard = new FormValidator(optionsClasses, formAddCard);
-
-validationFormEditProfile.enableValidation();
 validationFormAddCard.enableValidation();
 
-//функция открытия профиля
-function openEditProfilePopup() {
-  loadDataPopupEditProfile();
-  validationFormEditProfile.removeValidationErrors();
-  validationFormEditProfile.toggleButtonState();
-  openPopup(popupEditProfile);
+//функция загрузки картинки
+function uploadPicture(item) {
+  const newCard = new Card(
+    item,
+    "#galleryItem",
+    () => {
+      new PopupWithImage(popupImage, item).open();
+    }
+    ).generateCard();
+    gallery.prepend(newCard);
 }
+
+//создаем экземпляр класса попапа формы добавления
+const classPopupAddCard = new PopupWithForm({
+  selector: popupAddCard,
+  handleFormSubmit: uploadPicture
+});
 
 //функция открытия добавления картинок
 function openAddCardPopup() {
-  formAddCard.reset();
   validationFormAddCard.removeValidationErrors();
   validationFormAddCard.toggleButtonState();
-  openPopup(popupAddCard);
+
+  classPopupAddCard.open();
 }
 
-//функция добавления картинок
-function uploadPicture() {
-  const newImage = { name: inputPlaceName.value, link: inputPlaceUrl.value };
-  createCard(newImage);
-  closePopup(popupAddCard);
+/////////////////////Edit profile
+
+//слушаем кнопку
+buttonOpenEditProfilePopup.addEventListener('click', openEditProfilePopup);
+
+//создаем экземпляр класса валидации
+const validationFormEditProfile = new FormValidator(optionsClasses, formEditProfile);
+validationFormEditProfile.enableValidation();
+
+//создаем экземпляр класса попапа формы редактирования
+const classPopupEditProfile = new PopupWithForm({
+  selector: popupEditProfile,
+  handleFormSubmit: submitEditProfileForm
+});
+
+//функция отправки формы изменения данных профиля
+function submitEditProfileForm(item) {
+  fullname.textContent = item.name;
+  position.textContent = item.position;
 }
 
-//слушаем кнопки
-toggleEventListener(
-  buttonOpenEditProfilePopup,
-  "click",
-  openEditProfilePopup,
-  true
-);
+//функция открытия профиля
+function openEditProfilePopup() {
+  inputName.value = userInfo.getUserInfo().name;
+  inputPosition.value = userInfo.getUserInfo().info;
 
-toggleEventListener(buttonOpenAddCardPopup, "click", openAddCardPopup, true);
+  validationFormEditProfile.removeValidationErrors();
+  validationFormEditProfile.toggleButtonState();
 
-toggleEventListener(
-  formAddCard,
-  "submit",
-  (evt) => {
-    evt.preventDefault();
-    uploadPicture();
-  },
-  true
-);
-
-toggleEventListener(
-  formEditProfile,
-  "submit",
-  (evt) => {
-    evt.preventDefault();
-    submitEditProfileForm();
-  },
-  true
-);
+  classPopupEditProfile.open();
+}
