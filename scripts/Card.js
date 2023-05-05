@@ -1,4 +1,3 @@
-
 export default class Card {
   constructor(data, templateSelector, handleCardClick) {
     this._name = data.name;
@@ -43,7 +42,6 @@ export default class Card {
     this._galleryPic.addEventListener("click", () => {
       this._handleCardClick();
     });
-
   }
 
   _toggleLike() {
@@ -53,5 +51,4 @@ export default class Card {
   _deleteImage() {
     this._buttonDelete.closest(".gallery__item").remove();
   }
-
 }
