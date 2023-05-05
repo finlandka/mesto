@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="pages/index.css" type="text/css">
   <title>Проект: Место</title>
 </head>
 <body class="page">
@@ -14,7 +13,7 @@
       <main>
       <section class="profile">
         <div class="profile__card">
-        <img class="profile__avatar" src="images/avatar.png" alt="Аватар">
+        <img class="profile__avatar" src="<%=require('./images/avatar.png')%>" alt="Аватар">
         <div class="profile__info">
           <div>
             <h1 class="profile__fullname">Жак-Ив Кусто</h1>
@@ -30,7 +29,7 @@
           <template id="galleryItem">
             <li class="gallery__item">
               <button class="button gallery__delete"></button>
-              <img class="gallery__pic" src="images/gallery-baikal.jpg" alt="Байкал">
+              <img class="gallery__pic" src="<%=require('./images/gallery-baikal.jpg')%>" alt="Байкал">
               <div class="gallery__desc">
                 <h2 class="gallery__title">Байкал</h2>
                 <button class="button heart"></button>
@@ -76,15 +75,10 @@
   <div class="popup popup_image">
     <div class="popup__image-container">
       <button class="button button_action_close" aria-label="Закрыть"></button>
-      <img class="popup__image" src="images/gallery-baikal.jpg" alt="Байкал">
+      <img class="popup__image" src="<%=require('./images/gallery-baikal.jpg')%>" alt="Байкал">
       <h2 class="popup__desc">Байкал</h2>
     </div>
   </div>
 
-  <script src="scripts/constants.js" type="module"></script>
-  <script src="scripts/index.js" type="module"></script>
-  <script src="scripts/Section.js" type="module"></script>
-  <script src="scripts/Card.js" type="module"></script>
-  <script src="scripts/FormValidator.js" type="module"></script>
 </body>
 </html>

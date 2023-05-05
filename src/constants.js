@@ -1,27 +1,34 @@
+import baikal from './images/gallery-baikal.jpg';
+import kamchatka from './images/gallery-kamchatka.jpg';
+import kiji from './images/gallery-kiji.jpg';
+import ozero from './images/gallery-lake-onejskoe.jpg';
+import island from './images/gallery-pov-rybaci.jpg';
+import sochi from './images/gallery-sochi.jpg';
+
 const initialCards = [
   {
     name: "Байкал",
-    link: "images/gallery-baikal.jpg",
+    link: baikal,
   },
   {
     name: "Камчатка",
-    link: "images/gallery-kamchatka.jpg",
+    link: kamchatka,
   },
   {
     name: "Кижи",
-    link: "images/gallery-kiji.jpg",
+    link: kiji,
   },
   {
     name: "Онежское озеро",
-    link: "images/gallery-lake-onejskoe.jpg",
+    link: ozero,
   },
   {
     name: "Рыбачий полуостров",
-    link: "images/gallery-pov-rybaci.jpg",
+    link: island,
   },
   {
     name: "Сочи",
-    link: "images/gallery-sochi.jpg",
+    link: sochi,
   },
 ];
 
