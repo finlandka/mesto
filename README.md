@@ -16,6 +16,7 @@
 
 * html/css
 * JavaScript
+* Webpack
 
 **Ссылки**
 

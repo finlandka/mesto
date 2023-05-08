@@ -42,17 +42,9 @@ const optionsClasses = {
 };
 
 const page = document.querySelector(".page");
-const gallery = page.querySelector(".gallery");
 
 const buttonOpenAddCardPopup = page.querySelector(".button_action_add");
 const buttonOpenEditProfilePopup = page.querySelector(".button_action_edit");
-
-const popupEditProfile = page.querySelector(".popup_edit-profile");
-const popupAddCard = page.querySelector(".popup_add-card");
-const popupImage = page.querySelector(".popup_image");
-
-const fullname = page.querySelector(".profile__fullname");
-const position = page.querySelector(".profile__position");
 
 const formEditProfile = page.querySelector("#formEditProfile");
 const inputName = page.querySelector("#formName");
@@ -62,14 +54,8 @@ const formAddCard = page.querySelector("#formAddCard");
 export {
   initialCards,
   optionsClasses,
-  gallery,
   buttonOpenAddCardPopup,
   buttonOpenEditProfilePopup,
-  popupEditProfile,
-  popupAddCard,
-  popupImage,
-  fullname,
-  position,
   formEditProfile,
   inputName,
   inputPosition,

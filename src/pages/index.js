@@ -2,14 +2,8 @@ import './index.css';
 import {
   initialCards,
   optionsClasses,
-  gallery,
   buttonOpenAddCardPopup,
   buttonOpenEditProfilePopup,
-  popupEditProfile,
-  popupAddCard,
-  popupImage,
-  fullname,
-  position,
   formEditProfile,
   inputName,
   inputPosition,
@@ -22,27 +16,32 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
 
-//создание экземпляра класса Section и Card и применение метода отрисовки
+
+//создание экземпляра классов Section, Card, PopupWithImage и применение метода отрисовки
+
+const popupWithImage = new PopupWithImage('.popup_image');
+
 const defaultGallery = new Section(
   {
     items: initialCards,
     renderer: (item) => {
       defaultGallery.addItem(
         new Card(item, "#galleryItem", () => {
-          new PopupWithImage(popupImage, item).open();
+          popupWithImage.open(item.name, item.link);
+          popupWithImage.setEventListeners();
         }).generateCard()
       );
     },
   },
-  gallery
+  '.gallery'
 );
 
 defaultGallery.renderItems();
 
 //создание экземпляра класса UserInfo
 const userInfo = new UserInfo({
-  name: fullname,
-  info: position,
+  name: '.profile__fullname',
+  info: '.profile__position',
 });
 
 /////////Edit add card
@@ -57,23 +56,25 @@ validationFormAddCard.enableValidation();
 //функция загрузки картинки
 function uploadPicture(item) {
   const newCard = new Card(item, "#galleryItem", () => {
-    new PopupWithImage(popupImage, item).open();
+    popupWithImage.open(item.name, item.link);
+    popupWithImage.setEventListeners();
   }).generateCard();
-  gallery.prepend(newCard);
+  defaultGallery.addItem(newCard);
 }
 
-//создаем экземпляр класса попапа формы добавления
-const classPopupAddCard = new PopupWithForm({
-  selector: popupAddCard,
+//создаем экземпляр класса попапа формы добавления и вешаем листенер
+const popupWithFormAddCard = new PopupWithForm({
+  selector: '.popup_add-card',
   handleFormSubmit: uploadPicture,
 });
+popupWithFormAddCard.setEventListeners();
 
 //функция открытия добавления картинок
 function openAddCardPopup() {
   validationFormAddCard.removeValidationErrors();
   validationFormAddCard.toggleButtonState();
 
-  classPopupAddCard.open();
+  popupWithFormAddCard.open();
 }
 
 /////////////////////Edit profile
@@ -88,25 +89,26 @@ const validationFormEditProfile = new FormValidator(
 );
 validationFormEditProfile.enableValidation();
 
-//создаем экземпляр класса попапа формы редактирования
-const classPopupEditProfile = new PopupWithForm({
-  selector: popupEditProfile,
+//создаем экземпляр класса попапа формы редактирования и вешаем листенер
+const popupWithFormEditProfile = new PopupWithForm({
+  selector: '.popup_edit-profile',
   handleFormSubmit: submitEditProfileForm,
 });
+popupWithFormEditProfile.setEventListeners();
 
 //функция отправки формы изменения данных профиля
 function submitEditProfileForm(item) {
-  fullname.textContent = item.name;
-  position.textContent = item.position;
+  userInfo.setUserInfo(item);
 }
 
 //функция открытия профиля
 function openEditProfilePopup() {
-  inputName.value = userInfo.getUserInfo().name;
-  inputPosition.value = userInfo.getUserInfo().info;
+  const userInfoGet = userInfo.getUserInfo();
+  inputName.value = userInfoGet.name;
+  inputPosition.value = userInfoGet.info;
 
   validationFormEditProfile.removeValidationErrors();
   validationFormEditProfile.toggleButtonState();
 
-  classPopupEditProfile.open();
+  popupWithFormEditProfile.open();
 }

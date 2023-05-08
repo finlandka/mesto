@@ -49,6 +49,6 @@ export default class Card {
   }
 
   _deleteImage() {
-    this._buttonDelete.closest(".gallery__item").remove();
+    this._element.remove();
   }
 }
