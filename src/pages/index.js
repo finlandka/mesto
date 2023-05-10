@@ -20,6 +20,7 @@ import FormValidator from "../components/FormValidator.js";
 //создание экземпляра классов Section, Card, PopupWithImage и применение метода отрисовки
 
 const popupWithImage = new PopupWithImage('.popup_image');
+popupWithImage.setEventListeners();
 
 const defaultGallery = new Section(
   {
@@ -28,7 +29,6 @@ const defaultGallery = new Section(
       defaultGallery.addItem(
         new Card(item, "#galleryItem", () => {
           popupWithImage.open(item.name, item.link);
-          popupWithImage.setEventListeners();
         }).generateCard()
       );
     },
@@ -40,8 +40,8 @@ defaultGallery.renderItems();
 
 //создание экземпляра класса UserInfo
 const userInfo = new UserInfo({
-  name: '.profile__fullname',
-  info: '.profile__position',
+  selectorName: '.profile__fullname',
+  selectorInfo: '.profile__position',
 });
 
 /////////Edit add card
