@@ -51,6 +51,10 @@ const inputName = page.querySelector("#formName");
 const inputPosition = page.querySelector("#formPosition");
 const formAddCard = page.querySelector("#formAddCard");
 
+const fullname = page.querySelector('.profile__fullname');
+const position = page.querySelector('.profile__position');
+const avatar = page.querySelector('.profile__avatar');
+
 export {
   initialCards,
   optionsClasses,
@@ -60,4 +64,7 @@ export {
   inputName,
   inputPosition,
   formAddCard,
+  fullname,
+  position,
+  avatar
 };

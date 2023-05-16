@@ -8,7 +8,11 @@ import {
   inputName,
   inputPosition,
   formAddCard,
+  fullname,
+  position,
+  avatar
 } from "../constants.js";
+import Api from "../components/Api.js";
 import Section from "../components/Section.js";
 import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
@@ -16,27 +20,47 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
 
+//создание экземпляра класса Api
+const api = new Api('cohort-66', '18f7db66-c3a4-4e8d-a393-391bdf601f7c');
+
+//вставляем данные юзера с сервера на страницу профиля
+function loadUserInfo(){
+  api.getUserInfo()
+  .then(userInfoApi => {
+    fullname.textContent = userInfoApi.name;
+    position.textContent = userInfoApi.about;
+    avatar.src = userInfoApi.avatar;
+  })
+  .catch(err => console.log(`Ошибка: ${err}`))
+}
+loadUserInfo();
+
+
 
 //создание экземпляра классов Section, Card, PopupWithImage и применение метода отрисовки
 
 const popupWithImage = new PopupWithImage('.popup_image');
 popupWithImage.setEventListeners();
 
-const defaultGallery = new Section(
-  {
-    items: initialCards,
-    renderer: (item) => {
-      defaultGallery.addItem(
-        new Card(item, "#galleryItem", () => {
-          popupWithImage.open(item.name, item.link);
-        }).generateCard()
-      );
-    },
-  },
-  '.gallery'
-);
+const defaultGallery = new Section({
+  items: [],
+  renderer: (card) => {
+    defaultGallery.addItem(
+      new Card(card, '#galleryItem', () => {
+        popupWithImage.open(card.name, card.link);
+      }).generateCard(card.likes.length)
+    )
+  }
+}, '.gallery');
 
-defaultGallery.renderItems();
+api.getCards()
+  .then(cards => {
+    defaultGallery.setItems(cards);
+    return defaultGallery;    
+  })
+  .then(result => result.renderItems())
+  .catch(err => console.log(`Ошибка: ${err}`))
+
 
 //создание экземпляра класса UserInfo
 const userInfo = new UserInfo({
@@ -55,11 +79,14 @@ validationFormAddCard.enableValidation();
 
 //функция загрузки картинки
 function uploadPicture(item) {
-  const newCard = new Card(item, "#galleryItem", () => {
-    popupWithImage.open(item.name, item.link);
-    popupWithImage.setEventListeners();
-  }).generateCard();
-  defaultGallery.addItem(newCard);
+  api.addCard(item)
+    .then(card => {
+      const newCard = new Card(card, "#galleryItem", () => {
+        popupWithImage.open(card.name, card.link);
+        popupWithImage.setEventListeners();
+      }).generateCard(card.likes.length);
+      return defaultGallery.addItem(newCard);
+    })
 }
 
 //создаем экземпляр класса попапа формы добавления и вешаем листенер
@@ -98,7 +125,10 @@ popupWithFormEditProfile.setEventListeners();
 
 //функция отправки формы изменения данных профиля
 function submitEditProfileForm(item) {
-  userInfo.setUserInfo(item);
+  api.editProfile(item).then(res => {
+    userInfo.setUserInfo(res.name, res.about);
+    loadUserInfo();
+  });
 }
 
 //функция открытия профиля

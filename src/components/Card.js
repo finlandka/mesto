@@ -20,12 +20,14 @@ export default class Card {
     return templateGalleryItem;
   }
 
-  generateCard() {
+  generateCard(count) {
     this._setEventListeners();
     this._galleryPic.src = this._link;
     this._galleryPic.alt = this._name;
     const galleryTitle = this._element.querySelector(".gallery__title");
+    const likeCount = this._element.querySelector(".gallery__count");
     galleryTitle.textContent = this._name;
+    likeCount.textContent = count;
 
     return this._element;
   }
