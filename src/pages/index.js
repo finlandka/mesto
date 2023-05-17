@@ -53,13 +53,29 @@ const defaultGallery = new Section({
   }
 }, '.gallery');
 
-api.getCards()
-  .then(cards => {
+/*async function renderGallery() {
+  try {
+    const cards = await api.getCards();
     defaultGallery.setItems(cards);
-    return defaultGallery;    
+    defaultGallery.renderItems();
+    return defaultGallery; 
+  }
+  catch(error) { console.log(`Ошибка: ${error}`) }
+}
+
+renderGallery();*/
+
+const renderGallery = new Promise(function(resolve, reject) {
+  resolve(api.getCards());
+  reject(error);
+})
+renderGallery
+  .then(value => {
+    defaultGallery.setItems(value);
+    defaultGallery.renderItems();
+    return defaultGallery;
   })
-  .then(result => result.renderItems())
-  .catch(err => console.log(`Ошибка: ${err}`))
+  .catch(error => {console.log(error)})
 
 
 //создание экземпляра класса UserInfo
@@ -79,14 +95,19 @@ validationFormAddCard.enableValidation();
 
 //функция загрузки картинки
 function uploadPicture(item) {
-  api.addCard(item)
-    .then(card => {
-      const newCard = new Card(card, "#galleryItem", () => {
-        popupWithImage.open(card.name, card.link);
-        popupWithImage.setEventListeners();
-      }).generateCard(card.likes.length);
-      return defaultGallery.addItem(newCard);
-    })
+  const card = new Promise((resolve, reject) => {
+    resolve(api.addCard(item));
+    reject(error);
+  })
+  card
+    .then((value) => {
+      defaultGallery.setItems(value);
+      defaultGallery.renderItems();
+      return defaultGallery;
+      }
+    )
+    .catch(error => console.log(error))
+
 }
 
 //создаем экземпляр класса попапа формы добавления и вешаем листенер
