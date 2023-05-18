@@ -5,4 +5,24 @@
   object-position: center;
   padding: 3.75px 0;
   border-radius: 100px;
+  position: relative;
+  z-index: 1;
+}
+
+.profile__avatar:hover {
+  cursor: pointer;
+}
+
+.profile__avatar::before {
+  content: url('../../../images/editAvatar.svg');
+  position: absolute;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, .8);
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+.profile__avatar:hover::before {
+  display: block;
 }

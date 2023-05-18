@@ -75,6 +75,28 @@
     </div>
   </div>
 
+  <div class="popup popup_delete-card">
+    <div class="popup__container">
+      <button class="button button_action_close" aria-label="Закрыть"></button>
+        <h2 class="popup__title">Вы уверены?</h2>
+        <form class="popup__form" id="formDeleteCard" novalidate>
+          <button class="popup__button" type="submit">Да</button>
+        </form>
+    </div>
+  </div>
+
+  <div class="popup popup_edit-avatar">
+    <div class="popup__container">
+      <button class="button button_action_close" aria-label="Закрыть"></button>
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form class="popup__form" id="formEditAvatar" novalidate>
+          <input class="popup__input" id="avatarUrl" type="url" placeholder="Ссылка на аватар" name="link" required>
+          <span class="avatarUrl-error popup__error"></span>
+          <button class="popup__button" type="submit">Сохранить</button>
+        </form>
+    </div>
+  </div>
+
   <div class="popup popup_image">
     <div class="popup__image-container">
       <button class="button button_action_close" aria-label="Закрыть"></button>

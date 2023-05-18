@@ -50,6 +50,7 @@ const formEditProfile = page.querySelector("#formEditProfile");
 const inputName = page.querySelector("#formName");
 const inputPosition = page.querySelector("#formPosition");
 const formAddCard = page.querySelector("#formAddCard");
+const inputAvatarUrl = page.querySelector("#avatarUrl");
 
 const fullname = page.querySelector('.profile__fullname');
 const position = page.querySelector('.profile__position');
@@ -66,5 +67,6 @@ export {
   formAddCard,
   fullname,
   position,
-  avatar
+  avatar,
+  inputAvatarUrl
 };

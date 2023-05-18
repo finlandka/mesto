@@ -1,15 +1,15 @@
 export default class UserInfo {
-  constructor({ selectorName, selectorInfo }) {
+  constructor({ selectorName, selectorPosition }) {
     this._name = document.querySelector(selectorName);
-    this._info = document.querySelector(selectorInfo);
+    this._position = document.querySelector(selectorPosition);
   }
 
   getUserInfo() {
-    return { name: this._name.textContent, info: this._info.textContent };
+    return { name: this._name.textContent, info: this._position.textContent };
   }
 
   setUserInfo({ name, position }) {
     this._name.textContent = name;
-    this._info.textContent = position;
+    this._position.textContent = position;
   }
 }
