@@ -13,6 +13,7 @@ export default class Card {
     this._handleLikeClick = handleLikeClick;
     this._userId = cardObject.owner._id;
     this._cardId = cardObject._id;
+    this._arrayLikes = cardObject.likes;
   }
 
   _getTemplate() {
@@ -36,6 +37,11 @@ export default class Card {
     if(this._userId != '2526a40455e1d05c005a8c65') {
       galleryDelete.remove();
     }
+    this._arrayLikes.forEach(like => {
+      if(like._id === '2526a40455e1d05c005a8c65') {
+        this._toggleLike();
+      }
+    })
 
     return this._element;
   }
@@ -45,7 +51,6 @@ export default class Card {
       this._toggleLike();
       if(this._heart.classList.contains('heart_status_active')) {
         this._handleLikeClick(this._cardId, true);
-        console.log(this._cardId)
       } else {
         this._handleLikeClick(this._cardId, false)
       }

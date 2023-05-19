@@ -1,17 +1,15 @@
 import './index.css';
 import {
-  initialCards,
   optionsClasses,
+  gallery,
   buttonOpenAddCardPopup,
   buttonOpenEditProfilePopup,
   formEditProfile,
   inputName,
   inputPosition,
   formAddCard,
-  fullname,
-  position,
   avatar,
-  inputAvatarUrl
+  formEditAvatar
 } from "../constants.js";
 import Api from "../components/Api.js";
 import Section from "../components/Section.js";
@@ -31,7 +29,7 @@ const userInfo = new UserInfo({
   selectorPosition: '.profile__position',
 });
 
-//вставляем данные юзера с сервера на страницу профиля
+//функция вставки данных юзера с сервера на страницу профиля
 function loadUserInfo(){
   api.getUserInfo()
   .then(result => {
@@ -41,15 +39,17 @@ function loadUserInfo(){
 }
 loadUserInfo();
 
+//функция вставки аватара с сервера на страницу
 function loadAvatar() {
   api.getUserInfo()
     .then(result => {
-      avatar.src = result.avatar;
+      avatar.style.backgroundImage = `url(${result.avatar})`;
     })
     .catch(error => console.log(error))
 }
 loadAvatar();
 
+//форма редактирования аватара
 avatar.addEventListener('click', openEditAvatarPopup);
 
 const validationFormEditAvatar = new FormValidator(optionsClasses, formEditAvatar);
@@ -57,138 +57,138 @@ validationFormEditAvatar.enableValidation();
 
 const popupWithFormEditAvatar = new PopupWithForm({
   selector: '.popup_edit-avatar',
-  handleFormSubmit: () => {},
+  handleFormSubmit: editAvatar,
 });
 popupWithFormEditAvatar.setEventListeners();
 
+function editAvatar(item) {
+  return api.editAvatar(item)
+    .then(() => {
+      loadAvatar();
+    })
+    .catch(error => console.log(error))
+}
+
 function openEditAvatarPopup() {
-  inputAvatarUrl.value = avatar.src;
+  formEditAvatar.link.value = avatar.style.backgroundImage.slice(5, -2);
   validationFormEditAvatar.removeValidationErrors();
   validationFormEditAvatar.toggleButtonState();
-
   popupWithFormEditAvatar.open();
 }
 
+//создание экземпляра класса попапа подтверждения удаления
 const popupWithFormDeleteCard = new PopupWithConfirmation({
   selector: '.popup_delete-card',
   handleFormSubmit: deleteCard
 });
 popupWithFormDeleteCard.setEventListeners();
 
+//функция удаления карточки
 function deleteCard(idCard) {
-  api.deleteCard(idCard);
-  loadGallery();
-}
-
-function toggleLike(cardId, isLike) {
-  console.log(cardId, isLike);
-  if(isLike) {
-    api.addLike(cardId)
-  } else {
-    api.deleteLike(cardId)
-  }
-  loadGallery();
-}
-
-//создание экземпляра классов Section, Card, PopupWithImage и применение метода отрисовки
-
-const popupWithImage = new PopupWithImage('.popup_image');
-popupWithImage.setEventListeners();
-
-const defaultGallery = new Section({
-  items: [],
-  renderer: (card) => {
-    defaultGallery.addItem(
-      new Card(
-        card, 
-        '#galleryItem', 
-        () => {
-          popupWithImage.open(card.name, card.link);
-        },
-        () => {
-          popupWithFormDeleteCard.open(card._id);
-        },
-        toggleLike,
-        card
-      ).generateCard(card.likes.length)
-    )
-  }
-}, '.gallery');
-
-function loadGallery() {
-  api.getCards()
-    .then(value => {
-      defaultGallery.setItems(value);
-      defaultGallery.renderItems();
-      return defaultGallery;
-    })
-    .catch(error => {console.log(error)})
-}
-
-loadGallery();
-
-/////////Edit add card
-
-//слушаем кнопку
-buttonOpenAddCardPopup.addEventListener("click", openAddCardPopup);
-
-//создаем экземпляр класса валидации
-const validationFormAddCard = new FormValidator(optionsClasses, formAddCard);
-validationFormAddCard.enableValidation();
-
-//функция загрузки картинки
-function uploadPicture(card) {
-  api.addCard(card)
+  return api.deleteCard(idCard)
     .then(() => {
       loadGallery();
-      }
-    )
+    })
     .catch(error => console.log(error))
 }
 
-//создаем экземпляр класса попапа формы добавления и вешаем листенер
+//функция установки или удаления лайка
+function toggleLike(cardId, isLike) {
+  if(isLike) {
+    api.addLike(cardId)
+      .then(() => loadGallery())
+      .catch(error => console.log(error))
+  } else {
+    api.deleteLike(cardId)
+      .then(() => loadGallery())
+      .catch(error => console.log(error))
+  }
+}
+
+//создание экземпляра классов Section, Card, PopupWithImage и применение метода отрисовки галереи
+const popupWithImage = new PopupWithImage('.popup_image');
+popupWithImage.setEventListeners();
+
+//функция загрузки и отрисовки галереи
+function loadGallery() {
+  gallery.innerHTML = '';
+  api.getCards()
+    .then(result => {
+      const defaultGallery = new Section({
+        items: result,
+        renderer: (card) => {
+          defaultGallery.addItem(
+            new Card(
+              card, 
+              '#galleryItem', 
+              () => {
+                popupWithImage.open(card.name, card.link);
+              },
+              () => {
+                popupWithFormDeleteCard.open(card._id);
+              },
+              toggleLike,
+              card
+            ).generateCard(card.likes.length)
+          )
+        }
+      }, '.gallery');
+      return defaultGallery;
+    })
+    .then(result => result.renderItems())
+    .catch(error => {console.log(error)})
+}
+loadGallery();
+
+//форма добавления карточки
+buttonOpenAddCardPopup.addEventListener("click", openAddCardPopup);
+
+const validationFormAddCard = new FormValidator(optionsClasses, formAddCard);
+validationFormAddCard.enableValidation();
+
 const popupWithFormAddCard = new PopupWithForm({
   selector: '.popup_add-card',
   handleFormSubmit: uploadPicture,
 });
 popupWithFormAddCard.setEventListeners();
 
-//функция открытия добавления картинок
+function uploadPicture(card) {
+  return api.addCard(card)
+    .then(() => {
+      loadGallery();
+    })
+    .catch(error => console.log(error))
+}
+
 function openAddCardPopup() {
   validationFormAddCard.removeValidationErrors();
   validationFormAddCard.toggleButtonState();
-
   popupWithFormAddCard.open();
 }
 
-/////////////////////Edit profile
-
-//слушаем кнопку
+//форма редактирования профиля
 buttonOpenEditProfilePopup.addEventListener("click", openEditProfilePopup);
 
-//создаем экземпляр класса валидации
 const validationFormEditProfile = new FormValidator(
   optionsClasses,
   formEditProfile
 );
 validationFormEditProfile.enableValidation();
 
-//создаем экземпляр класса попапа формы редактирования и вешаем листенер
 const popupWithFormEditProfile = new PopupWithForm({
   selector: '.popup_edit-profile',
   handleFormSubmit: submitEditProfileForm,
 });
 popupWithFormEditProfile.setEventListeners();
 
-//функция отправки формы изменения данных профиля
 function submitEditProfileForm(item) {
-  api.editProfile(item)
+  return api.editProfile(item)
     .then(() => {
       loadUserInfo();
-    });
+    })
+    .catch(error => console.log(error))
 }
 
-//функция открытия профиля
 function openEditProfilePopup() {
   const userInfoGet = userInfo.getUserInfo();
   inputName.value = userInfoGet.name;

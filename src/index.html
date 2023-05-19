@@ -13,7 +13,7 @@
       <main>
       <section class="profile">
         <div class="profile__card">
-        <img class="profile__avatar" src="<%=require('./images/avatar.png')%>" alt="Аватар">
+        <div class="profile__avatar"></div>
         <div class="profile__info">
           <div>
             <h1 class="profile__fullname">Жак-Ив Кусто</h1>
@@ -25,21 +25,20 @@
         <button class="button button_action_add" aria-label="Добавить"></button>
       </section>
       <section class="gallery-section">
-        <ul class="gallery">
-          <template id="galleryItem">
-            <li class="gallery__item">
-              <button class="button gallery__delete"></button>
-              <img class="gallery__pic" src="<%=require('./images/gallery-baikal.jpg')%>" alt="Байкал">
-              <div class="gallery__desc">
-                <h2 class="gallery__title">Байкал</h2>
-                <div>
-                  <button class="button heart"></button>
-                  <p class="gallery__count"></p>
-                </div>
+        <ul class="gallery"></ul>
+        <template id="galleryItem">
+          <li class="gallery__item">
+            <button class="button gallery__delete"></button>
+            <img class="gallery__pic" src="<%=require('./images/gallery-baikal.jpg')%>" alt="Байкал">
+            <div class="gallery__desc">
+              <h2 class="gallery__title">Байкал</h2>
+              <div>
+                <button class="button heart"></button>
+                <p class="gallery__count"></p>
               </div>
-            </li>
-          </template>
-        </ul>
+            </div>
+          </li>
+        </template>
       </section>
       </main>
       <footer class="footer">
