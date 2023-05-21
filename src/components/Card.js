@@ -1,5 +1,12 @@
 export default class Card {
-  constructor(data, templateSelector, handleCardClick, handleDeleteClick, handleLikeClick, cardObject) {
+  constructor(
+    data,
+    templateSelector,
+    handleCardClick,
+    handleDeleteClick,
+    handleLikeClick,
+    cardObject
+  ) {
     this._name = data.name;
     this._link = data.link;
     this._templateSelector = templateSelector;
@@ -34,31 +41,32 @@ export default class Card {
     const likeCount = this._element.querySelector(".gallery__count");
     galleryTitle.textContent = this._name;
     likeCount.textContent = count;
-    if(this._userId != '2526a40455e1d05c005a8c65') {
+    if (this._userId != "2526a40455e1d05c005a8c65") {
       galleryDelete.remove();
     }
-    this._arrayLikes.forEach(like => {
-      if(like._id === '2526a40455e1d05c005a8c65') {
+    this._arrayLikes.forEach((like) => {
+      if (like._id === "2526a40455e1d05c005a8c65") {
         this._toggleLike();
       }
-    })
+    });
 
     return this._element;
   }
 
   _setEventListeners() {
-    this._heart.addEventListener("click", () => {
+    this._heart.addEventListener("click", (event) => {
+      this._countElement = event.target.nextElementSibling;
       this._toggleLike();
-      if(this._heart.classList.contains('heart_status_active')) {
-        this._handleLikeClick(this._cardId, true);
+      if (this._heart.classList.contains("heart_status_active")) {
+        this._handleLikeClick(this._cardId, true, this._countElement);
       } else {
-        this._handleLikeClick(this._cardId, false)
+        this._handleLikeClick(this._cardId, false, this._countElement);
       }
     });
 
-    this._buttonDelete.addEventListener("click", () => {
-      this._handleDeleteClick();
-      //this._deleteImage();
+    this._buttonDelete.addEventListener("click", (event) => {
+      this._elementCard = event.target.parentElement;
+      this._handleDeleteClick(this._elementCard);
     });
 
     this._galleryPic.addEventListener("click", () => {

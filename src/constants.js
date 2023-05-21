@@ -9,7 +9,7 @@ const optionsClasses = {
 };
 
 const page = document.querySelector(".page");
-const gallery = document.querySelector(".gallery");
+const loaderImage = new URL('../src/images/loader.gif', import.meta.url);
 
 const buttonOpenAddCardPopup = page.querySelector(".button_action_add");
 const buttonOpenEditProfilePopup = page.querySelector(".button_action_edit");
@@ -24,7 +24,7 @@ const avatar = page.querySelector('.profile__avatar');
 
 export {
   optionsClasses,
-  gallery,
+  loaderImage,
   buttonOpenAddCardPopup,
   buttonOpenEditProfilePopup,
   formEditProfile,
