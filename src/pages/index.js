@@ -21,12 +21,13 @@ import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
 
 //создание экземпляра класса Api
-const api = new Api("cohort-66", "18f7db66-c3a4-4e8d-a393-391bdf601f7c");
+const api = new Api("https://nomoreparties.co/v1/cohort-66", "18f7db66-c3a4-4e8d-a393-391bdf601f7c");
 
 //создание экземпляра класса UserInfo
 const userInfo = new UserInfo({
   selectorName: ".profile__fullname",
   selectorPosition: ".profile__position",
+  selectorAvatar: ".profile__avatar"
 });
 
 //функция вставки данных юзера с сервера на страницу профиля
@@ -46,7 +47,7 @@ function loadAvatar() {
   api
     .getUserInfo()
     .then((result) => {
-      avatar.style.backgroundImage = `url(${result.avatar})`;
+      userInfo.setAvatar(result.avatar)
     })
     .catch((error) => console.log(error));
 }
@@ -68,12 +69,18 @@ const popupWithFormEditAvatar = new PopupWithForm({
 popupWithFormEditAvatar.setEventListeners();
 
 function editAvatar(item) {
-  return api
-    .editAvatar(item)
-    .then(() => {
-      loadAvatar();
-    })
-    .catch((error) => console.log(error));
+  return new Promise((resolve, reject) => {
+    api
+      .editAvatar(item)
+      .then(() => {
+        loadAvatar();
+        resolve()
+      })
+      .catch((error) => {
+        console.log(error)
+        reject(error)
+      });
+  })
 }
 
 function openEditAvatarPopup() {
@@ -91,33 +98,49 @@ const popupWithFormDeleteCard = new PopupWithConfirmation({
 popupWithFormDeleteCard.setEventListeners();
 
 //функция удаления карточки
-function deleteCard(idCard, elementCard) {
-  return api
-    .deleteCard(idCard)
-    .then(() => {
-      elementCard.remove();
-    })
-    .catch((error) => console.log(error));
+function deleteCard(idCard, cardInstance) {
+  return new Promise((resolve, reject) => {
+    api
+      .deleteCard(idCard)
+      .then(() => {
+        cardInstance.deleteImage();
+        resolve();
+      })
+      .catch((error) => {
+        console.log(error)
+        reject(error);
+      });
+  })
 }
 
 //функция установки или удаления лайка
-function toggleLike(cardId, isLike, countElement) {
+function toggleLike(cardId, isLike, cardInstance) {
   if (isLike) {
-    countElement.textContent = Number(countElement.textContent) + 1;
-    api
-      .addLike(cardId)
-      .then((result) => {
-        countElement.textContent = result.likes.length;
-      })
-      .catch((error) => console.log(error));
+    return new Promise((resolve, reject) => {
+      api
+        .addLike(cardId)
+        .then((result) => {
+          cardInstance.loadLike(result);
+          resolve()
+        })
+        .catch((error) => {
+          console.log(error)
+          reject(error)
+        });
+    })
   } else {
-    countElement.textContent = Number(countElement.textContent) - 1;
-    api
-      .deleteLike(cardId)
-      .then((result) => {
-        countElement.textContent = result.likes.length;
-      })
-      .catch((error) => console.log(error));
+    return new Promise((resolve, reject) => {
+      api
+        .deleteLike(cardId)
+        .then((result) => {
+          cardInstance.loadLike(result);
+          resolve()
+        })
+        .catch((error) => {
+          console.log(error)
+          reject(error)
+        });
+    })
   }
 }
 
@@ -125,24 +148,27 @@ function toggleLike(cardId, isLike, countElement) {
 const popupWithImage = new PopupWithImage(".popup_image");
 popupWithImage.setEventListeners();
 
+function addNewCard(card) {
+  const newCard = new Card(
+    card,
+    "#galleryItem",
+    () => {
+      popupWithImage.open(card.name, card.link);
+    },
+    () => {
+      popupWithFormDeleteCard.open(card._id, newCard);
+    },
+    (cardId, isLike) => {toggleLike(cardId, isLike, newCard)},
+    card
+  );
+  return newCard;
+}
+
 const defaultGallery = new Section(
   {
     items: [],
     renderer: (card) => {
-      defaultGallery.addItem(
-        new Card(
-          card,
-          "#galleryItem",
-          () => {
-            popupWithImage.open(card.name, card.link);
-          },
-          (elementCard) => {
-            popupWithFormDeleteCard.open(card._id, elementCard);
-          },
-          toggleLike,
-          card
-        ).generateCard(card.likes.length)
-      );
+      defaultGallery.addItem(addNewCard(card).generateCard(card.likes.length));
     },
   },
   ".gallery"
@@ -150,14 +176,13 @@ const defaultGallery = new Section(
 
 //функция загрузки и отрисовки галереи
 function loadGallery() {
-  api
-    .getCards()
-    .then((result) => {
-      defaultGallery.setItems(result.reverse());
-      return defaultGallery;
-    })
-    .then((result) => {
-      result.renderItems();
+  Promise.all([
+    api.getCards(),
+    api.getUserInfo()
+  ])
+    .then(result => {
+      defaultGallery.setItems(result[0].reverse());
+      defaultGallery.renderItems();
     })
     .catch((error) => {
       console.log(error);
@@ -178,26 +203,19 @@ const popupWithFormAddCard = new PopupWithForm({
 popupWithFormAddCard.setEventListeners();
 
 function uploadPicture(card) {
-  return api
-    .addCard(card)
-    .then((card) => {
-      return new Card(
-        card,
-        "#galleryItem",
-        () => {
-          popupWithImage.open(card.name, card.link);
-        },
-        (elementCard) => {
-          popupWithFormDeleteCard.open(card._id, elementCard);
-        },
-        toggleLike,
-        card
-      ).generateCard(card.likes.length);
-    })
-    .then((element) => {
-      defaultGallery.addItem(element);
-    })
-    .catch((error) => console.log(error));
+  return new Promise((resolve, reject) => {
+    api
+      .addCard(card)
+      .then((card) => {
+        defaultGallery.addItem(addNewCard(card).generateCard(card.likes.length));
+        resolve();
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  })
+  
 }
 
 function openAddCardPopup() {
@@ -222,12 +240,18 @@ const popupWithFormEditProfile = new PopupWithForm({
 popupWithFormEditProfile.setEventListeners();
 
 function submitEditProfileForm(item) {
-  return api
-    .editProfile(item)
-    .then(() => {
-      loadUserInfo();
-    })
-    .catch((error) => console.log(error));
+  return new Promise((resolve, reject) => {
+    api
+      .editProfile(item)
+      .then(() => {
+        loadUserInfo();
+        resolve()
+      })
+      .catch((error) => {
+        console.log(error)
+        reject(error)
+      });
+  })
 }
 
 function openEditProfilePopup() {

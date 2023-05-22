@@ -18,7 +18,8 @@ export default class Card {
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
     this._handleLikeClick = handleLikeClick;
-    this._userId = cardObject.owner._id;
+    this._userId = '2526a40455e1d05c005a8c65';
+    this._ownerId = cardObject.owner._id;
     this._cardId = cardObject._id;
     this._arrayLikes = cardObject.likes;
   }
@@ -41,11 +42,11 @@ export default class Card {
     const likeCount = this._element.querySelector(".gallery__count");
     galleryTitle.textContent = this._name;
     likeCount.textContent = count;
-    if (this._userId != "2526a40455e1d05c005a8c65") {
+    if (this._ownerId != this._userId) {
       galleryDelete.remove();
     }
     this._arrayLikes.forEach((like) => {
-      if (like._id === "2526a40455e1d05c005a8c65") {
+      if (like._id === this._userId) {
         this._toggleLike();
       }
     });
@@ -56,17 +57,19 @@ export default class Card {
   _setEventListeners() {
     this._heart.addEventListener("click", (event) => {
       this._countElement = event.target.nextElementSibling;
-      this._toggleLike();
       if (this._heart.classList.contains("heart_status_active")) {
-        this._handleLikeClick(this._cardId, true, this._countElement);
+        this._handleLikeClick(this._cardId, false)
+          .then(() => this._toggleLike())
+          .catch(error => console.log(error))
       } else {
-        this._handleLikeClick(this._cardId, false, this._countElement);
+        this._handleLikeClick(this._cardId, true)
+          .then(() => this._toggleLike())
+          .catch(error => console.log(error))
       }
     });
 
-    this._buttonDelete.addEventListener("click", (event) => {
-      this._elementCard = event.target.parentElement;
-      this._handleDeleteClick(this._elementCard);
+    this._buttonDelete.addEventListener("click", () => {
+      this._handleDeleteClick(this._element)
     });
 
     this._galleryPic.addEventListener("click", () => {
@@ -78,7 +81,11 @@ export default class Card {
     this._heart.classList.toggle("heart_status_active");
   }
 
-  /*_deleteImage() {
+  loadLike(data) {
+    this._countElement.textContent = data.likes.length;
+  }
+
+  deleteImage() {
     this._element.remove();
-  }*/
+  }
 }

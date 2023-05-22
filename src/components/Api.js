@@ -1,37 +1,34 @@
 export default class Api {
-  constructor(cohortId, token) {
-    this._cohortId = cohortId;
+  constructor(apiPath, token) {
+    this._apiPath = apiPath;
     this._token = token;
   }
 
+  _getResponseData(res) {
+    if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+    return res.json();
+  }
+
   getUserInfo() {
-    return fetch(`https://nomoreparties.co/v1/${this._cohortId}/users/me`, {
+    return fetch(`${this._apiPath}/users/me`, {
       headers: {
         authorization: this._token,
       },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    }).then((res) => this._getResponseData(res));
   }
 
   getCards() {
-    return fetch(`https://nomoreparties.co/v1/${this._cohortId}/cards`, {
+    return fetch(`${this._apiPath}/cards`, {
       headers: {
         authorization: this._token,
       },
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    }).then((res) => this._getResponseData(res));
   }
 
   editProfile(data) {
-    return fetch(`https://nomoreparties.co/v1/${this._cohortId}/users/me`, {
+    return fetch(`${this._apiPath}/users/me`, {
       method: "PATCH",
       headers: {
         authorization: this._token,
@@ -41,37 +38,24 @@ export default class Api {
         name: data.name,
         about: data.position,
       }),
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    }).then((res) => this._getResponseData(res));
   }
 
   editAvatar(data) {
-    return fetch(
-      `https://nomoreparties.co/v1/${this._cohortId}/users/me/avatar`,
-      {
-        method: "PATCH",
-        headers: {
-          authorization: this._token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          avatar: data.link,
-        }),
-      }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return fetch(`${this._apiPath}/users/me/avatar`, {
+      method: "PATCH",
+      headers: {
+        authorization: this._token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        avatar: data.link,
+      }),
+    }).then((res) => this._getResponseData(res));
   }
 
   addCard(data) {
-    return fetch(`https://nomoreparties.co/v1/${this._cohortId}/cards`, {
+    return fetch(`${this._apiPath}/cards`, {
       method: "POST",
       headers: {
         authorization: this._token,
@@ -81,62 +65,33 @@ export default class Api {
         name: data.name,
         link: data.link,
       }),
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    }).then((res) => this._getResponseData(res));
   }
 
   deleteCard(cardId) {
-    return fetch(
-      `https://nomoreparties.co/v1/${this._cohortId}/cards/${cardId}`,
-      {
-        method: "DELETE",
-        headers: {
-          authorization: this._token,
-        },
-      }
-    ).then((res) => {
-      if (res.ok) {
-        return Promise.resolve();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return fetch(`${this._apiPath}/cards/${cardId}`, {
+      method: "DELETE",
+      headers: {
+        authorization: this._token,
+      },
+    }).then((res) => this._getResponseData(res));
   }
 
   addLike(cardId) {
-    return fetch(
-      `https://nomoreparties.co/v1/${this._cohortId}/cards/${cardId}/likes`,
-      {
-        method: "PUT",
-        headers: {
-          authorization: this._token,
-        },
-      }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return fetch(`${this._apiPath}/cards/${cardId}/likes`, {
+      method: "PUT",
+      headers: {
+        authorization: this._token,
+      },
+    }).then((res) => this._getResponseData(res));
   }
 
   deleteLike(cardId) {
-    return fetch(
-      `https://nomoreparties.co/v1/${this._cohortId}/cards/${cardId}/likes`,
-      {
-        method: "DELETE",
-        headers: {
-          authorization: this._token,
-        },
-      }
-    ).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+    return fetch(`${this._apiPath}/cards/${cardId}/likes`, {
+      method: "DELETE",
+      headers: {
+        authorization: this._token,
+      },
+    }).then((res) => this._getResponseData(res));
   }
 }
