@@ -21,13 +21,16 @@ import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
 
 //создание экземпляра класса Api
-const api = new Api("https://nomoreparties.co/v1/cohort-66", "18f7db66-c3a4-4e8d-a393-391bdf601f7c");
+const api = new Api(
+  "https://nomoreparties.co/v1/cohort-66",
+  "18f7db66-c3a4-4e8d-a393-391bdf601f7c"
+);
 
 //создание экземпляра класса UserInfo
 const userInfo = new UserInfo({
   selectorName: ".profile__fullname",
   selectorPosition: ".profile__position",
-  selectorAvatar: ".profile__avatar"
+  selectorAvatar: ".profile__avatar",
 });
 
 //функция вставки данных юзера с сервера на страницу профиля
@@ -47,7 +50,7 @@ function loadAvatar() {
   api
     .getUserInfo()
     .then((result) => {
-      userInfo.setAvatar(result.avatar)
+      userInfo.setAvatar(result.avatar);
     })
     .catch((error) => console.log(error));
 }
@@ -74,13 +77,13 @@ function editAvatar(item) {
       .editAvatar(item)
       .then(() => {
         loadAvatar();
-        resolve()
+        resolve();
       })
       .catch((error) => {
-        console.log(error)
-        reject(error)
+        console.log(error);
+        reject(error);
       });
-  })
+  });
 }
 
 function openEditAvatarPopup() {
@@ -107,10 +110,10 @@ function deleteCard(idCard, cardInstance) {
         resolve();
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         reject(error);
       });
-  })
+  });
 }
 
 //функция установки или удаления лайка
@@ -121,26 +124,26 @@ function toggleLike(cardId, isLike, cardInstance) {
         .addLike(cardId)
         .then((result) => {
           cardInstance.loadLike(result);
-          resolve()
+          resolve();
         })
         .catch((error) => {
-          console.log(error)
-          reject(error)
+          console.log(error);
+          reject(error);
         });
-    })
+    });
   } else {
     return new Promise((resolve, reject) => {
       api
         .deleteLike(cardId)
         .then((result) => {
           cardInstance.loadLike(result);
-          resolve()
+          resolve();
         })
         .catch((error) => {
-          console.log(error)
-          reject(error)
+          console.log(error);
+          reject(error);
         });
-    })
+    });
   }
 }
 
@@ -158,7 +161,9 @@ function addNewCard(card) {
     () => {
       popupWithFormDeleteCard.open(card._id, newCard);
     },
-    (cardId, isLike) => {toggleLike(cardId, isLike, newCard)},
+    (cardId, isLike) => {
+      return toggleLike(cardId, isLike, newCard);
+    },
     card
   );
   return newCard;
@@ -176,11 +181,8 @@ const defaultGallery = new Section(
 
 //функция загрузки и отрисовки галереи
 function loadGallery() {
-  Promise.all([
-    api.getCards(),
-    api.getUserInfo()
-  ])
-    .then(result => {
+  Promise.all([api.getCards(), api.getUserInfo()])
+    .then((result) => {
       defaultGallery.setItems(result[0].reverse());
       defaultGallery.renderItems();
     })
@@ -207,15 +209,16 @@ function uploadPicture(card) {
     api
       .addCard(card)
       .then((card) => {
-        defaultGallery.addItem(addNewCard(card).generateCard(card.likes.length));
+        defaultGallery.addItem(
+          addNewCard(card).generateCard(card.likes.length)
+        );
         resolve();
       })
       .catch((error) => {
         console.log(error);
         reject(error);
       });
-  })
-  
+  });
 }
 
 function openAddCardPopup() {
@@ -245,13 +248,13 @@ function submitEditProfileForm(item) {
       .editProfile(item)
       .then(() => {
         loadUserInfo();
-        resolve()
+        resolve();
       })
       .catch((error) => {
-        console.log(error)
-        reject(error)
+        console.log(error);
+        reject(error);
       });
-  })
+  });
 }
 
 function openEditProfilePopup() {

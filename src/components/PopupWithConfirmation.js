@@ -18,7 +18,7 @@ export default class PopupWithConfirmation extends Popup {
       e.preventDefault();
       this._handleFormSubmit(this._idCard, this._cardInstance)
         .then(() => this.close())
-        .catch(error => console.log(error))
+        .catch((error) => console.log(error));
     });
   }
 }

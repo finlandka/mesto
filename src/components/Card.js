@@ -18,7 +18,7 @@ export default class Card {
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
     this._handleLikeClick = handleLikeClick;
-    this._userId = '2526a40455e1d05c005a8c65';
+    this._userId = "2526a40455e1d05c005a8c65";
     this._ownerId = cardObject.owner._id;
     this._cardId = cardObject._id;
     this._arrayLikes = cardObject.likes;
@@ -60,16 +60,16 @@ export default class Card {
       if (this._heart.classList.contains("heart_status_active")) {
         this._handleLikeClick(this._cardId, false)
           .then(() => this._toggleLike())
-          .catch(error => console.log(error))
+          .catch((error) => console.log(error));
       } else {
         this._handleLikeClick(this._cardId, true)
           .then(() => this._toggleLike())
-          .catch(error => console.log(error))
+          .catch((error) => console.log(error));
       }
     });
 
     this._buttonDelete.addEventListener("click", () => {
-      this._handleDeleteClick(this._element)
+      this._handleDeleteClick(this._element);
     });
 
     this._galleryPic.addEventListener("click", () => {
