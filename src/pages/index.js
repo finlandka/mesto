@@ -42,7 +42,6 @@ function loadUserInfo() {
     })
     .catch((err) => console.log(`Ошибка: ${err}`));
 }
-loadUserInfo();
 
 //функция вставки аватара с сервера на страницу
 function loadAvatar() {
@@ -54,7 +53,6 @@ function loadAvatar() {
     })
     .catch((error) => console.log(error));
 }
-loadAvatar();
 
 //форма редактирования аватара
 avatar.addEventListener("click", openEditAvatarPopup);
@@ -164,7 +162,8 @@ function addNewCard(card) {
     (cardId, isLike) => {
       return toggleLike(cardId, isLike, newCard);
     },
-    card
+    card,
+    api.userId
   );
   return newCard;
 }
@@ -181,10 +180,13 @@ const defaultGallery = new Section(
 
 //функция загрузки и отрисовки галереи
 function loadGallery() {
+  avatar.style.backgroundImage = `url(${loaderImage})`;
   Promise.all([api.getCards(), api.getUserInfo()])
     .then((result) => {
       defaultGallery.setItems(result[0].reverse());
       defaultGallery.renderItems();
+      userInfo.setUserInfo({ name: result[1].name, position: result[1].about });
+      userInfo.setAvatar(result[1].avatar);
     })
     .catch((error) => {
       console.log(error);
@@ -243,18 +245,14 @@ const popupWithFormEditProfile = new PopupWithForm({
 popupWithFormEditProfile.setEventListeners();
 
 function submitEditProfileForm(item) {
-  return new Promise((resolve, reject) => {
-    api
-      .editProfile(item)
-      .then(() => {
-        loadUserInfo();
-        resolve();
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
+  return api
+    .editProfile(item)
+    .then(() => {
+      loadUserInfo();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 function openEditProfilePopup() {

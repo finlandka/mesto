@@ -2,6 +2,7 @@ export default class Api {
   constructor(apiPath, token) {
     this._apiPath = apiPath;
     this._token = token;
+    this.userId = null;
   }
 
   _getResponseData(res) {
@@ -16,7 +17,12 @@ export default class Api {
       headers: {
         authorization: this._token,
       },
-    }).then((res) => this._getResponseData(res));
+    })
+      .then((res) => this._getResponseData(res))
+      .then((data) => {
+        this.userId = data._id;
+        return data;
+      });
   }
 
   getCards() {

@@ -5,7 +5,8 @@ export default class Card {
     handleCardClick,
     handleDeleteClick,
     handleLikeClick,
-    cardObject
+    cardObject,
+    userId
   ) {
     this._name = data.name;
     this._link = data.link;
@@ -18,7 +19,7 @@ export default class Card {
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
     this._handleLikeClick = handleLikeClick;
-    this._userId = "2526a40455e1d05c005a8c65";
+    this._userId = userId;
     this._ownerId = cardObject.owner._id;
     this._cardId = cardObject._id;
     this._arrayLikes = cardObject.likes;
